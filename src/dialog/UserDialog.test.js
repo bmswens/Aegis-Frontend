@@ -29,7 +29,7 @@ describe('<UserDialog>', function() {
                 />
             </UserContext.Provider>
         )
-        let closeButton = screen.getByRole("button", { name: "Close" })
+        let closeButton = screen.getByRole("button", { name: "Cancel" })
         await act(() => user.click(closeButton))
         expect(value.setFirstName).not.toHaveBeenCalled()
         expect(value.setLastName).not.toHaveBeenCalled()

@@ -10,6 +10,7 @@ const demoUser = {
     phone: "123-456-7890",
     email: "demouser@example.com",
     // functions handled by the provider
+    setUsername: /* istanbul ignore next */ name => {},
     setLoggedIn: /* istanbul ignore next */ status => {},
     setFirstName: /* istanbul ignore next */ name => {},
     setLastName: /* istanbul ignore next */ name => {},
@@ -40,6 +41,7 @@ function UserContextProvider(props) {
                 address,
                 phone,
                 email,
+                setUsername,
                 setLoggedIn,
                 setFirstName,
                 setLastName,

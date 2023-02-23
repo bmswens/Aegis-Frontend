@@ -1,8 +1,8 @@
 // React
-import React, { useContext } from 'react'
+import React from 'react'
 
 // MUI
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from '@mui/material'
 
 // custom
 import UserContext from '../context/UserContext'
@@ -19,6 +19,11 @@ function UserDialog(props) {
     const [email, setEmail] = React.useState(userContext.email)
 
     function handleClose() {
+        setFirstName(userContext.firstName)
+        setLastName(userContext.lastName)
+        setAddress(userContext.address)
+        setPhone(userContext.phone)
+        setEmail(userContext.email)
         close()
     }
 
@@ -61,6 +66,8 @@ function UserDialog(props) {
 
     return (
         <Dialog
+            maxWidth="sm"
+            fullWidth
             open={open}
             onClose={handleClose}
         >
@@ -68,54 +75,56 @@ function UserDialog(props) {
                 User Settings
             </DialogTitle>
             <DialogContent>
-                <TextField
-                    label="Username"
-                    fullWidth
-                    disabled
-                    value={userContext.username}
-                />
-                <TextField
-                    label="First Name"
-                    fullWidth
-                    value={firstName}
-                    onChange={event => setFirstName(event.target.value)}
-                />
-                <TextField
-                    label="Last Name"
-                    fullWidth
-                    value={lastName}
-                    onChange={event => setLastName(event.target.value)}
-                />
-                <TextField
-                    label="Address"
-                    fullWidth
-                    value={address}
-                    onChange={event => setAddress(event.target.value)}
-                />
-                <TextField
-                    label="Phone Number"
-                    fullWidth
-                    value={phone}
-                    onChange={event => setPhone(event.target.value)}
-                />
-                <TextField
-                    label="Email"
-                    fullWidth
-                    value={email}
-                    onChange={event => setEmail(event.target.value)}
-                />
+                <Stack spacing={1} sx={{marginTop: 1}}>
+                    <TextField
+                        label="Username"
+                        fullWidth
+                        disabled
+                        value={userContext.username}
+                    />
+                    <TextField
+                        label="First Name"
+                        fullWidth
+                        value={firstName}
+                        onChange={event => setFirstName(event.target.value)}
+                    />
+                    <TextField
+                        label="Last Name"
+                        fullWidth
+                        value={lastName}
+                        onChange={event => setLastName(event.target.value)}
+                    />
+                    <TextField
+                        label="Address"
+                        fullWidth
+                        value={address}
+                        onChange={event => setAddress(event.target.value)}
+                    />
+                    <TextField
+                        label="Phone Number"
+                        fullWidth
+                        value={phone}
+                        onChange={event => setPhone(event.target.value)}
+                    />
+                    <TextField
+                        label="Email"
+                        fullWidth
+                        value={email}
+                        onChange={event => setEmail(event.target.value)}
+                    />
+                </Stack>
             </DialogContent>
             <DialogActions>
                 <Button
                     onClick={handleClose}
                     variant="contained"
                 >
-                    Close
+                    Cancel
                 </Button>
                 <Button
                     onClick={submit}
                     disabled={!canSubmit}
-                    variant="conatined"
+                    variant="contained"
                 >
                     Apply
                 </Button>

@@ -19,7 +19,7 @@ describe('<TopNav>', function() {
         await act(() => user.click(profileButton))
         let profileDialog = screen.getByRole("dialog", { name: "User Settings"})
         expect(profileDialog).not.toBeNull()
-        let closeButton = screen.getByRole("button", { name: "Close" })
+        let closeButton = screen.getByRole("button", { name: "Cancel" })
         await act(() => user.click(closeButton))
         await waitFor(() => {
             let dialog = screen.queryByRole("dialog")
