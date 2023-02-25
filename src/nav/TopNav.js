@@ -8,6 +8,7 @@ import { AppBar, Box, IconButton, Toolbar, Tooltip } from '@mui/material'
 import ShieldIcon from '@mui/icons-material/Shield'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import UserDialog from '../dialog/UserDialog'
+import { Link } from 'react-router-dom'
 
 function TopNav(props) {
 
@@ -22,13 +23,17 @@ function TopNav(props) {
                 position="static"
             >
                 <Toolbar>
-                    <Tooltip
-                        title="Home"
-                    >
-                        <IconButton>
-                            <ShieldIcon fontSize="large" />
-                        </IconButton>
-                    </Tooltip>
+                    <Link to="/">
+                        <Tooltip
+                            title="Home"
+                        >
+                            <IconButton
+                                aria-label="Home"
+                            >
+                                <ShieldIcon fontSize="large" />
+                            </IconButton>
+                        </Tooltip>
+                    </Link>
                     <Box sx={{ flexGrow: 1 }} />
                     <Tooltip
                         title="User Profile"
