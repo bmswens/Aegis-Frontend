@@ -6,6 +6,7 @@ const demoUser = {
     username: "DemoUser",
     firstName: "Demo",
     lastName: "User",
+    title: "Aegis User",
     address: "9800 Savage Rd., Suite 6272 Fort George G. Meade",
     phone: "123-456-7890",
     email: "demouser@example.com",
@@ -14,6 +15,7 @@ const demoUser = {
     setLoggedIn: /* istanbul ignore next */ status => {},
     setFirstName: /* istanbul ignore next */ name => {},
     setLastName: /* istanbul ignore next */ name => {},
+    setTitle: /* istanbul ignore next */ name => {},
     setAddress: /* istanbul ignore next */ address => {},
     setPhone: /* istanbul ignore next */ phone => {},
     setEmail: /* istanbul ignore next */ email => {}
@@ -27,6 +29,7 @@ function UserContextProvider(props) {
     const [username, setUsername] = React.useState(demoUser.username)
     const [firstName, setFirstName] = React.useState(demoUser.firstName)
     const [lastName, setLastName] = React.useState(demoUser.lastName)
+    const [title, setTitle] = React.useState(demoUser.title)
     const [address, setAddress] = React.useState(demoUser.address)
     const [phone, setPhone] = React.useState(demoUser.phone)
     const [email, setEmail] = React.useState(demoUser.email)
@@ -38,6 +41,7 @@ function UserContextProvider(props) {
                 username,
                 firstName,
                 lastName,
+                title,
                 address,
                 phone,
                 email,
@@ -45,6 +49,7 @@ function UserContextProvider(props) {
                 setLoggedIn,
                 setFirstName,
                 setLastName,
+                setTitle,
                 setAddress,
                 setPhone,
                 setEmail

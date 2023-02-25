@@ -14,6 +14,7 @@ function UserDialog(props) {
 
     const [firstName, setFirstName] = React.useState(userContext.firstName)
     const [lastName, setLastName] = React.useState(userContext.lastName)
+    const [title, setTitle] = React.useState(userContext.title)
     const [address, setAddress] = React.useState(userContext.address)
     const [phone, setPhone] = React.useState(userContext.phone)
     const [email, setEmail] = React.useState(userContext.email)
@@ -24,6 +25,7 @@ function UserDialog(props) {
         setAddress(userContext.address)
         setPhone(userContext.phone)
         setEmail(userContext.email)
+        setTitle(userContext.title)
         close()
     }
 
@@ -44,6 +46,9 @@ function UserDialog(props) {
         if (email !== userContext.email) {
             userContext.setEmail(email)
         }
+        if (title !== userContext.title) {
+            userContext.setTitle(title)
+        }
         close()
     }
 
@@ -61,6 +66,9 @@ function UserDialog(props) {
         canSubmit = true
     }
     else if (email !== userContext.email) {
+        canSubmit = true
+    }
+    else if (title !== userContext.title) {
         canSubmit = true
     }
 
@@ -93,6 +101,12 @@ function UserDialog(props) {
                         fullWidth
                         value={lastName}
                         onChange={event => setLastName(event.target.value)}
+                    />
+                    <TextField
+                        label="Title"
+                        fullWidth
+                        value={title}
+                        onChange={event => setTitle(event.target.value)}
                     />
                     <TextField
                         label="Address"

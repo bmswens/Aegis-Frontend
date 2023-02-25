@@ -18,7 +18,8 @@ describe('<UserDialog>', function() {
             setLastName: jest.fn(),
             setAddress: jest.fn(),
             setPhone: jest.fn(),
-            setEmail: jest.fn()
+            setEmail: jest.fn(),
+            setTitle: jest.fn()
         }
         let close = jest.fn()
         render(
@@ -36,6 +37,7 @@ describe('<UserDialog>', function() {
         expect(value.setAddress).not.toHaveBeenCalled()
         expect(value.setPhone).not.toHaveBeenCalled()
         expect(value.setEmail).not.toHaveBeenCalled()
+        expect(value.setTitle).not.toHaveBeenCalled()
         expect(close).toHaveBeenCalled()
 
     })
@@ -159,6 +161,28 @@ describe('<UserDialog>', function() {
         let applyButton = screen.getByRole("button", { name: "Apply" })
         await act(() => user.click(applyButton))
         expect(value.setEmail).toHaveBeenCalledWith(`${demoUser.email} My New Email`)
+        expect(close).toHaveBeenCalled()
+    })
+    it("should allow a user to update their title", async function() {
+        const user = userEvent.setup()
+        let value = {
+            ...demoUser,
+            setTitle: jest.fn()
+        }
+        let close = jest.fn()
+        render(
+            <UserContext.Provider value={value}>
+                <UserDialog
+                    open={true}
+                    close={close}
+                />
+            </UserContext.Provider>
+        )
+        let textField = screen.getByLabelText("Title")
+        await act(() => user.type(textField, " My New Title")) 
+        let applyButton = screen.getByRole("button", { name: "Apply" })
+        await act(() => user.click(applyButton))
+        expect(value.setTitle).toHaveBeenCalledWith(`${demoUser.title} My New Title`)
         expect(close).toHaveBeenCalled()
     })
 })
