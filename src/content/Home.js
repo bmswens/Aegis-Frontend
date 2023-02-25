@@ -5,9 +5,9 @@ import React from 'react'
 import { Grid, IconButton, Stack, Tooltip, Typography } from '@mui/material'
 
 // MUI Icons
-import CorporateFareIcon from '@mui/icons-material/CorporateFare'
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import AddCircleIcon from '@mui/icons-material/AddCircle'
+import GroupsIcon from '@mui/icons-material/Groups'
+import PersonAddIcon from '@mui/icons-material/PersonAdd'
+import GroupAddIcon from '@mui/icons-material/GroupAdd'
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt'
 import LanIcon from '@mui/icons-material/Lan'
 import PermPhoneMsgIcon from '@mui/icons-material/PermPhoneMsg'
@@ -110,14 +110,14 @@ function Home(props) {
                 link="/people/org-chart"
             />
             <AppButton
-                title="Organizations"
-                icon={<CorporateFareIcon sx={{ fontSize: "20vmin" }} />}
-                link="/organizations"
+                title="Teams"
+                icon={<GroupsIcon sx={{ fontSize: "20vmin" }} />}
+                link="/teams"
             />
             <AppButton
                 disabled
-                title="Add Org"
-                icon={<AddCircleIcon sx={{ fontSize: "20vmin" }} />}
+                title="Add Team"
+                icon={<GroupAddIcon sx={{ fontSize: "20vmin" }} />}
             />
             <AppButton
                 disabled

@@ -7,16 +7,16 @@ import { BrowserRouter } from 'react-router-dom'
 import Home from './Home'
 
 describe("<Home>", function() {
-    it('should have a button to nav to organizations', function() {
+    it('should have a button to nav to teams', function() {
         render(
             <BrowserRouter>
                 <Home />
             </BrowserRouter>
         )
-        let button = screen.getByRole("button", { name: "Organizations"})
+        let button = screen.getByRole("button", { name: "Teams"})
         expect(button).not.toBeNull()
     })
-    it('should have a button to nav to org charts of orgs', function() {
+    it('should have a button to add new people', function() {
         render(
             <BrowserRouter>
                 <Home />
@@ -25,13 +25,13 @@ describe("<Home>", function() {
         let button = screen.getByRole("button", { name: "Add Person"})
         expect(button).not.toBeNull()
     })
-    it('should have a button to create a new org', function() {
+    it('should have a button to create a new team', function() {
         render(
             <BrowserRouter>
                 <Home />
             </BrowserRouter>
         )
-        let button = screen.getByRole("button", { name: "Add Org"})
+        let button = screen.getByRole("button", { name: "Add Team"})
         expect(button).not.toBeNull()
     })
     it('should have a button to nav to people', function() {
