@@ -5,6 +5,7 @@ import React from 'react'
 import { Grid } from '@mui/material'
 import { Route, Routes } from 'react-router-dom'
 import Home from './Home'
+import People from './people/People'
 
 function ContentGrid(props) {
 
@@ -30,6 +31,10 @@ function Content(props) {
             <Route
                 path="/"
                 element={<Home />}
+            />
+            <Route
+                path="/people"
+                element={<People />}
             />
         </Routes>
     )

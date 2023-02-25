@@ -93,7 +93,6 @@ function Home(props) {
     return (
         <ContentGrid>
             <AppButton
-                disabled
                 title="People"
                 icon={<PeopleAltIcon sx={{ fontSize: "20vmin" }} />}
                 link="/people"
