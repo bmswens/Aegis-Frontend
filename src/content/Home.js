@@ -110,6 +110,7 @@ function Home(props) {
                 link="/people/org-chart"
             />
             <AppButton
+                disabled
                 title="Teams"
                 icon={<GroupsIcon sx={{ fontSize: "20vmin" }} />}
                 link="/teams"
