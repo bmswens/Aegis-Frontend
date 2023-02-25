@@ -20,6 +20,7 @@ import { Link } from 'react-router-dom'
 
 // custom
 import { ContentGrid } from './Content'
+import UserDialog from '../dialog/UserDialog';
 
 
 function AppButton(props) {
@@ -29,7 +30,8 @@ function AppButton(props) {
         icon,
         title,
         link,
-        external
+        external,
+        onClick
     } = props
 
     if (disabled) {
@@ -66,6 +68,7 @@ function AppButton(props) {
                             <IconButton
                                 disabled={disabled}
                                 aria-label={title}
+                                onClick={onClick}
                             >
                                 {icon}
                             </IconButton>
@@ -81,6 +84,11 @@ function AppButton(props) {
 }
 
 function Home(props) {
+
+    const [settingsOpen, setSettingsOpen] = React.useState(false)
+    function close() {
+        setSettingsOpen(false)
+    }
 
     return (
         <ContentGrid>
@@ -131,9 +139,14 @@ function Home(props) {
                 external
             />
             <AppButton
-                disabled
                 title="Settings"
                 icon={<SettingsIcon sx={{ fontSize: "20vmin" }} />}
+                onClick={() => setSettingsOpen(true)}
+            />
+            {/* Dialogs */}
+            <UserDialog
+                open={settingsOpen}
+                close={close}
             />
         </ContentGrid>
     )

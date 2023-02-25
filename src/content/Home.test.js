@@ -1,5 +1,6 @@
 // testing help
-import { screen, render, act } from '@testing-library/react'
+import { screen, render, act, waitFor } from '@testing-library/react'
+import userEvent  from '@testing-library/user-event'
 import { BrowserRouter } from 'react-router-dom'
 
 // to test
@@ -78,7 +79,8 @@ describe("<Home>", function() {
         let button = screen.getByRole("button", { name: "View Code"})
         expect(button).not.toBeNull()
     })
-    it('should have a button to open settings', function() {
+    it('should have a button to open settings', async function() {
+        const user = userEvent.setup()
         render(
             <BrowserRouter>
                 <Home />
@@ -86,5 +88,14 @@ describe("<Home>", function() {
         )
         let button = screen.getByRole("button", { name: "Settings"})
         expect(button).not.toBeNull()
+        await act(() => user.click(button))
+        let dialog = screen.getByRole("dialog", { title: "User Settings"})
+        expect(dialog).not.toBeNull()
+        let closeButton = screen.getByRole("button", { name: "Cancel" })
+        await act(() => user.click(closeButton))
+        await waitFor(() => {
+            let settingsDialog = screen.queryByRole("dialog", { title: "User Settings"})
+            expect(settingsDialog).toBeNull()
+        })
     })
 })
