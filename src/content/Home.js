@@ -1,0 +1,142 @@
+// React
+import React from 'react'
+
+// MUI
+import { Grid, IconButton, Stack, Tooltip, Typography } from '@mui/material'
+
+// MUI Icons
+import CorporateFareIcon from '@mui/icons-material/CorporateFare'
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import AddCircleIcon from '@mui/icons-material/AddCircle'
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt'
+import LanIcon from '@mui/icons-material/Lan'
+import PermPhoneMsgIcon from '@mui/icons-material/PermPhoneMsg'
+import InfoIcon from '@mui/icons-material/Info'
+import GitHubIcon from '@mui/icons-material/GitHub'
+import SettingsIcon from '@mui/icons-material/Settings'
+
+// React Router
+import { Link } from 'react-router-dom'
+
+// custom
+import { ContentGrid } from './Content'
+
+
+function AppButton(props) {
+
+    const {
+        disabled,
+        icon,
+        title,
+        link,
+        external
+    } = props
+
+    if (disabled) {
+        return (
+            <Grid item xs={4} sx={{ display: "flex", justifyContent: "center" }}>
+                <Stack>
+                    <Tooltip
+                        title={"Coming Soon!" }
+                    >
+                        <span>
+                            <IconButton
+                                disabled={disabled}
+                                aria-label={title}
+                            >
+                                {icon}
+                            </IconButton>
+                        </span>
+                    </Tooltip>
+                    <Typography align="center">
+                        {title}
+                    </Typography>
+                </Stack>
+            </Grid>
+        )
+    }
+    return (
+        <Grid item xs={4} sx={{ display: "flex", justifyContent: "center" }}>
+            <Link to={link} style={{ textDecoration: "none", color: "inherit" }} target={external ? "_blank" : "_self"}>
+                <Stack>
+                    <Tooltip
+                        title={title}
+                    >
+                        <span>
+                            <IconButton
+                                disabled={disabled}
+                                aria-label={title}
+                            >
+                                {icon}
+                            </IconButton>
+                        </span>
+                    </Tooltip>
+                    <Typography align="center">
+                        {title}
+                    </Typography>
+                </Stack>
+            </Link>
+        </Grid>
+    )
+}
+
+function Home(props) {
+
+    return (
+        <ContentGrid>
+            <AppButton
+                disabled
+                title="People"
+                icon={<PeopleAltIcon sx={{ fontSize: "20vmin" }} />}
+                link="/people"
+            />
+            <AppButton
+                disabled
+                title="Org Charts"
+                icon={<LanIcon sx={{ fontSize: "20vmin" }} />}
+                link="/people/org-chart"
+            />
+            <AppButton
+                disabled
+                title="Add Person"
+                icon={<PersonAddIcon sx={{ fontSize: "20vmin" }} />}
+                link="/people/org-chart"
+            />
+            <AppButton
+                title="Organizations"
+                icon={<CorporateFareIcon sx={{ fontSize: "20vmin" }} />}
+                link="/organizations"
+            />
+            <AppButton
+                disabled
+                title="Add Org"
+                icon={<AddCircleIcon sx={{ fontSize: "20vmin" }} />}
+            />
+            <AppButton
+                disabled
+                title="Recalls"
+                icon={<PermPhoneMsgIcon sx={{ fontSize: "20vmin" }} />}
+                link="/recalls"
+            />
+            <AppButton
+                disabled
+                title="More Info"
+                icon={<InfoIcon sx={{ fontSize: "20vmin" }} />}
+                link="/more-info"
+            />
+            <AppButton
+                title="View Code"
+                icon={<GitHubIcon sx={{ fontSize: "20vmin" }} />}
+                link="https://github.com/bmswens/Aegis-Frontend"
+                external
+            />
+            <AppButton
+                disabled
+                title="Settings"
+                icon={<SettingsIcon sx={{ fontSize: "20vmin" }} />}
+            />
+        </ContentGrid>
+    )
+}
+
+export default Home

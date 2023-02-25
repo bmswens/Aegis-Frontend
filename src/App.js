@@ -1,13 +1,20 @@
+// router
+import { BrowserRouter } from "react-router-dom"
+
 // custom
+import Content from "./content/Content"
 import Context from "./context/Context"
 import TopNav from "./nav/TopNav"
 
 
 function App() {
   return (
-    <Context>
-      <TopNav />
-    </Context>
+    <BrowserRouter>
+      <Context>
+        <TopNav />
+        <Content />
+      </Context>
+    </BrowserRouter>
   )
 }
 
