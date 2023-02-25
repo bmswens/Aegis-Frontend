@@ -33,7 +33,7 @@ describe('<PersonCard>', function() {
         render(
             <BrowserRouter>
                 <PersonCard
-                    title="App Dev"
+                    address="317 W. 3rd St, Beaver Dam, WI"
                 />
             </BrowserRouter>
         )
