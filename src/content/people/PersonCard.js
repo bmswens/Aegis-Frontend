@@ -9,9 +9,11 @@ import PlaceIcon from '@mui/icons-material/Place'
 import EmailIcon from '@mui/icons-material/Email'
 import SmsIcon from '@mui/icons-material/Sms'
 import CallIcon from '@mui/icons-material/Call'
+import InfoIcon from '@mui/icons-material/Info'
 
 // router 
 import { Link } from 'react-router-dom'
+import PersonInfoDialog from '../../dialog/PersonInfoDialog'
 
 function LinkButton(props) {
     const {
@@ -37,6 +39,9 @@ function LinkButton(props) {
 
 function PersonCardActions(props) {
     const {
+        firstName,
+        lastName,
+        title,
         address,
         email,
         phone
@@ -47,8 +52,21 @@ function PersonCardActions(props) {
         addressURL = `https://www.google.com/maps/place/${encodeURIComponent(address)}`
     }
 
+    // info dialog status
+    const [open, setOpen] = React.useState(false)
+
     return (
         <CardActions>
+            <Tooltip
+                title="More Info"
+            >
+                <IconButton
+                    aria-label="More Info"
+                    onClick={() => setOpen(true)}
+                >
+                    <InfoIcon fontSize="large" />
+                </IconButton>
+            </Tooltip>
             <Box sx={{flexGrow: 1}} />
             <LinkButton
                 title="View Address"
@@ -74,6 +92,17 @@ function PersonCardActions(props) {
             >
                 <CallIcon fontSize="large" />
             </LinkButton>
+            {/* Dialogs */}
+            <PersonInfoDialog
+                open={open}
+                close={() => setOpen(false)}
+                firstName={firstName}
+                lastName={lastName}
+                title={title}
+                address={address}
+                phone={phone}
+                email={email}
+            />
         </CardActions>
     )
 }
@@ -97,6 +126,9 @@ function PersonCard(props) {
                     subheader={title}
                 />
                 <PersonCardActions
+                    firstName={firstName}
+                    lastName={lastName}
+                    title={title}
                     address={address}
                     email={email}
                     phone={phone}
