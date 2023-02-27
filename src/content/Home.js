@@ -98,10 +98,9 @@ function Home(props) {
                 link="/people"
             />
             <AppButton
-                disabled
-                title="Org Charts"
+                title="Org Chart"
                 icon={<LanIcon sx={{ fontSize: "20vmin" }} />}
-                link="/people/org-chart"
+                link="/org-chart"
             />
             <AppButton
                 disabled

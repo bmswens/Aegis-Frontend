@@ -49,7 +49,7 @@ describe("<Home>", function() {
                 <Home />
             </BrowserRouter>
         )
-        let button = screen.getByRole("button", { name: "Org Charts"})
+        let button = screen.getByRole("button", { name: "Org Chart"})
         expect(button).not.toBeNull()
     })
     it('should have a button to nav to recalls', function() {

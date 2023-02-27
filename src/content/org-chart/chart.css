@@ -1,0 +1,44 @@
+.orgchart-container {
+    background-color: #121212;
+    border: none;
+    width: 100vw;
+    height: calc(100vh - 176px);
+    margin: 0;
+}
+
+.orgchart-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.orgchart-container {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.orgchart {
+    padding: 0;
+}
+
+.orgchart.chart {
+    background-color: #121212;
+    background-image: none;
+}
+
+.orgchart.chart>ul>li>ul li::before {
+    border-top-color: #215a88;
+}
+
+.orgchart.chart>ul>li>ul li .oc-node::before,
+.orgchart.chart ul li .oc-node:not(:only-child)::after {
+    background-color: #215a88;
+}
+
+.orgchart ul li .oc-node.selected {
+    background-color: rgba(2, 136, 209, 0.5);
+  }
+.orgchart ul li .oc-node:hover {
+    background-color: rgba(2, 136, 209, 0.5);
+}

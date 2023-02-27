@@ -6,6 +6,7 @@ import { Grid } from '@mui/material'
 import { Route, Routes } from 'react-router-dom'
 import Home from './Home'
 import People from './people/People'
+import OrgChart from './org-chart/OrgChart'
 
 function ContentGrid(props) {
 
@@ -35,6 +36,10 @@ function Content(props) {
             <Route
                 path="/people"
                 element={<People />}
+            />
+            <Route
+                path="/org-chart"
+                element={<OrgChart />}
             />
         </Routes>
     )

@@ -27,3 +27,6 @@ const people = {
 }
 
 export default people
+export {
+    makeFakePerson
+}
