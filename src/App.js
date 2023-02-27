@@ -9,7 +9,7 @@ import TopNav from "./nav/TopNav"
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.REACT_APP_BASENAME}>
       <Context>
         <TopNav />
         <Content />
