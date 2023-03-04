@@ -18,6 +18,26 @@ async function getShortOrgs() {
     return output
 }
 
+function makeMockOrg(seed) {
+    return {
+        name: faker.company.name(),
+        id: faker.datatype.uuid(),
+        memberCount: faker.datatype.number({min: 4, max: 32}),
+        address: `${faker.address.streetAddress()}, ${faker.address.cityName()}, ${faker.address.stateAbbr()}`,
+        email: faker.internet.email(),
+        phone: faker.phone.number(),
+        ...seed
+    }
+}
+
+async function getOrgs() {
+    let output = []
+    for (let i = 0; i <= faker.datatype.number({min: 4, max: 12}); i++) {
+        output.push(makeMockOrg())
+    }
+    return output
+}
+
 // org chart helper functions
 function makeChildren(depth=0) {
     let output = []
@@ -43,7 +63,8 @@ async function getOrgChart(orgId) {
 
 const org = {
     getShortOrgs,
-    getOrgChart
+    getOrgChart,
+    getOrgs
 }
 
 export default org

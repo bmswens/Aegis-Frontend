@@ -50,7 +50,7 @@ function PersonSearch(props) {
     )
 }
 
-function PersonSkeleton(props) {
+function LoadingSkeleton(props) {
     return (
         <Grid item xs={12}>
             <Skeleton
@@ -125,7 +125,7 @@ function People(props)  {
                 setSearch={setSearch}
             />
             { loading ?
-                [1, 2, 3, 4, 5].map(n => <PersonSkeleton key={n} />)
+                [1, 2, 3, 4, 5].map(n => <LoadingSkeleton key={n} />)
                 :
                 toDisplay.map(person => <PersonCard key={person.email} {...person} />)
             }
@@ -134,3 +134,6 @@ function People(props)  {
 }
 
 export default People
+export {
+    LoadingSkeleton
+}

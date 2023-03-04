@@ -111,7 +111,6 @@ function Home(props) {
                 onClick={() => setAddPersonOpen(true)}
             />
             <AppButton
-                disabled
                 title="Teams"
                 icon={<GroupsIcon sx={{ fontSize: "20vmin" }} />}
                 link="/teams"

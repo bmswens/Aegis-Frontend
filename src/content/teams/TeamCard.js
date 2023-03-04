@@ -52,7 +52,7 @@ function TeamCard(props) {
 
     const {
         name,
-        uuid,
+        id,
         memberCount,
         address,
         email,
@@ -87,7 +87,7 @@ function TeamCard(props) {
                     </IconButton>
                     <LinkButton
                         title="Details"
-                        to={`/teams/${uuid}`}
+                        to={`/teams/${id}`}
                         icon={<LaunchIcon fontSize="large" />}
                     />
                     <Box sx={{flexGrow: 1}} />
