@@ -2,7 +2,7 @@
 import React from 'react'
 
 // MUI
-import { Avatar, Box, Card, CardActions, CardHeader, Grid, IconButton, Tooltip } from '@mui/material'
+import { Avatar, Box, Card, CardActions, CardHeader, Grid, IconButton, Tooltip, useTheme } from '@mui/material'
 
 // MUI Icons
 import PlaceIcon from '@mui/icons-material/Place'
@@ -50,6 +50,8 @@ function LinkButton(props) {
 
 function TeamCard(props) {
 
+    const theme = useTheme()
+
     const {
         name,
         id,
@@ -79,12 +81,28 @@ function TeamCard(props) {
             <Card>
                 <CardHeader
                     title={name}
-                    avatar={<Avatar>{memberCount}</Avatar>}
+                    avatar={
+                    <Tooltip
+                        title="Member Count"
+                    >
+                        <Avatar
+                            sx={{
+                                bgcolor: theme.palette.primary.dark
+                            }}
+                        >
+                            {memberCount}
+                        </Avatar>
+                    </Tooltip>
+                }
                 />
                 <CardActions>
-                    <IconButton>
-                        <InfoIcon fontSize="large" />
-                    </IconButton>
+                    <Tooltip
+                        title="Quick Info"
+                    >
+                        <IconButton>
+                            <InfoIcon fontSize="large" />
+                        </IconButton>
+                    </Tooltip>
                     <LinkButton
                         title="Details"
                         to={`/teams/${id}`}

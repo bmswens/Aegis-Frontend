@@ -10,7 +10,7 @@ async function getShortOrgs() {
     ]
     for (let i = 0; i < faker.datatype.number({min: 5, max: 42}); i++ ) {
         let fakeOrg = {
-            name: faker.company.name(),
+            name: `${faker.commerce.department()} Department`,
             id: faker.datatype.uuid()
         }
         output.push(fakeOrg)
@@ -20,7 +20,7 @@ async function getShortOrgs() {
 
 function makeMockOrg(seed) {
     return {
-        name: faker.company.name(),
+        name: `${faker.commerce.department()} Department`,
         id: faker.datatype.uuid(),
         memberCount: faker.datatype.number({min: 4, max: 32}),
         address: `${faker.address.streetAddress()}, ${faker.address.cityName()}, ${faker.address.stateAbbr()}`,
