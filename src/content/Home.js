@@ -21,6 +21,7 @@ import { Link } from 'react-router-dom'
 // custom
 import { ContentGrid } from './Content'
 import UserDialog from '../dialog/UserDialog';
+import NewPersonDialog from '../dialog/NewPersonDialog'
 
 
 function AppButton(props) {
@@ -85,8 +86,10 @@ function AppButton(props) {
 
 function Home(props) {
 
+    const [addPersonOpen, setAddPersonOpen] = React.useState(false)
     const [settingsOpen, setSettingsOpen] = React.useState(false)
     function close() {
+        setAddPersonOpen(false)
         setSettingsOpen(false)
     }
 
@@ -103,10 +106,9 @@ function Home(props) {
                 link="/org-chart"
             />
             <AppButton
-                disabled
                 title="Add Person"
                 icon={<PersonAddIcon sx={{ fontSize: "20vmin" }} />}
-                link="/people/org-chart"
+                onClick={() => setAddPersonOpen(true)}
             />
             <AppButton
                 disabled
@@ -145,6 +147,10 @@ function Home(props) {
             {/* Dialogs */}
             <UserDialog
                 open={settingsOpen}
+                close={close}
+            />
+            <NewPersonDialog
+                open={addPersonOpen}
                 close={close}
             />
         </ContentGrid>

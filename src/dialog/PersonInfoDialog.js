@@ -58,6 +58,7 @@ function PersonInfoDialog(props) {
                     />
                     <TextField
                         label="Email"
+                        type="email"
                         fullWidth
                         disabled
                         value={email}

@@ -29,15 +29,18 @@ function NewPersonDialog(props) {
 
     function submit() {
         api.people.addPerson(data)
+        handleClose()
     }
 
     return (
         <Dialog
+            maxWidth="sm"
+            fullWidth
             open={open}
             onClose={close}
         >
             <DialogTitle align="center">
-                Add A Person
+                Add New Person
             </DialogTitle>
             <DialogContent>
                 <Stack
