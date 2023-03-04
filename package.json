@@ -26,7 +26,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "echo aegis.swenson.software > ./build/CNAME && gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -50,7 +50,9 @@
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "index.js",
-      "reportWebVitals.js"
+      "reportWebVitals.js",
+      "service-worker.js",
+      "serviceWorkerRegistration.js"
     ]
   },
   "devDependencies": {
