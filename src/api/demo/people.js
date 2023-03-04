@@ -22,8 +22,13 @@ async function getPeople() {
     return output
 }
 
+async function addPerson(person) {
+    return faker.datatype.uuid()
+}
+
 const people = {
-    getPeople
+    getPeople,
+    addPerson
 }
 
 export default people

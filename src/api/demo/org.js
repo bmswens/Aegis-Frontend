@@ -25,7 +25,7 @@ function makeChildren(depth=0) {
     if (depth >= 4) {
         return output
     }
-    for (let i = 0; i < faker.datatype.number({min: 0, max: 4}); i++) {
+    for (let i = 0; i < faker.datatype.number({min: 1, max: 4}); i++) {
         let fakePerson = makeFakePerson()
         fakePerson.children = makeChildren(depth + 1)
         fakePerson.id = String(faker.datatype.uuid())
