@@ -10,9 +10,10 @@ import PersonCard from './PersonCard'
 import api from '../../api'
 import { Stack } from '@mui/system'
 
-function PersonSearch(props) {
+function SearchBar(props) {
     const { search, setSearch } = props
     const [ text, setText ] = React.useState(search)
+    
     return (
         <Grid item xs={12}>
             <Card
@@ -120,7 +121,7 @@ function People(props)  {
 
     return (
         <ContentGrid>
-            <PersonSearch
+            <SearchBar
                 search={search}
                 setSearch={setSearch}
             />
@@ -135,5 +136,6 @@ function People(props)  {
 
 export default People
 export {
-    LoadingSkeleton
+    LoadingSkeleton,
+    SearchBar
 }
