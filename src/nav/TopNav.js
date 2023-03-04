@@ -5,7 +5,6 @@ import React from 'react'
 import { AppBar, Box, IconButton, Toolbar, Tooltip } from '@mui/material'
 
 // MUI Icons
-import ShieldIcon from '@mui/icons-material/Shield'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import UserDialog from '../dialog/UserDialog'
 import { Link } from 'react-router-dom'
@@ -30,7 +29,14 @@ function TopNav(props) {
                             <IconButton
                                 aria-label="Home"
                             >
-                                <ShieldIcon fontSize="large" />
+                                <Box
+                                    component="img"
+                                    src={process.env.PUBLIC_URL + "/logo512-light.png"}
+                                    sx={{
+                                        height: "36px",
+                                        width: "36px"
+                                    }}
+                                />
                             </IconButton>
                         </Tooltip>
                     </Link>
