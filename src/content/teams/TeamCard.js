@@ -13,6 +13,7 @@ import LaunchIcon from '@mui/icons-material/Launch'
 
 // router dom
 import { Link } from 'react-router-dom'
+import TeamQuickInfoDialog from './TeamQuickInfoDialog'
 
 function LinkButton(props) {
     const { title, to, icon, external } = props
@@ -58,7 +59,8 @@ function TeamCard(props) {
         memberCount,
         address,
         email,
-        phone
+        phone,
+        admins
     } = props
 
     let addressURL = ""
@@ -75,6 +77,9 @@ function TeamCard(props) {
     if (phone) {
         phoneURL = `tel:${phone}`
     }
+
+    // dialog
+    const [infoOpen, setInfoOpen] = React.useState(false)
 
     return (
         <Grid item xs={12}>
@@ -97,9 +102,11 @@ function TeamCard(props) {
                 />
                 <CardActions>
                     <Tooltip
-                        title="Quick Info"
+                        title="More Info"
                     >
-                        <IconButton>
+                        <IconButton
+                            onClick={() => setInfoOpen(true)}
+                        >
                             <InfoIcon fontSize="large" />
                         </IconButton>
                     </Tooltip>
@@ -129,6 +136,15 @@ function TeamCard(props) {
                     />
                 </CardActions>
             </Card>
+            <TeamQuickInfoDialog
+                open={infoOpen}
+                close={() => setInfoOpen(false)}
+                name={name}
+                address={address}
+                email={email}
+                phone={phone}
+                admins={admins}
+            />
         </Grid>
     )
 }

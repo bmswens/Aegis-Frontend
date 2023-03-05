@@ -13,6 +13,18 @@ async function getShortOrgs() {
     return output
 }
 
+function makeMockAdmins() {
+    let output = []
+    for (let i = 0; i < faker.datatype.number({min: 1, max: 4}); i++ ) {
+        let admin = {
+            name: faker.name.firstName() + " " + faker.name.lastName(),
+            id: faker.datatype.uuid()
+        }
+        output.push(admin)
+    }
+    return output
+}
+
 function makeMockOrg(seed) {
     return {
         name: `${faker.commerce.department()} Department`,
@@ -21,6 +33,7 @@ function makeMockOrg(seed) {
         address: `${faker.address.streetAddress()}, ${faker.address.cityName()}, ${faker.address.stateAbbr()}`,
         email: faker.internet.email(),
         phone: faker.phone.number(),
+        admins: makeMockAdmins(),
         ...seed
     }
 }

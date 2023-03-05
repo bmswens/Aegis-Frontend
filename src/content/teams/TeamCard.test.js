@@ -69,4 +69,22 @@ describe('<TeamCard>', function() {
         let button = screen.getByRole("button", { name: "Call"})
         expect(button.disabled).toBeTruthy()
     })
+    it("should open the info dialog", async function() {
+        let user = userEvent.setup()
+        render(
+            <BrowserRouter>
+                <TeamCard />
+            </BrowserRouter>
+        )
+        let open = screen.getByRole("button", { name: "More Info" })
+        await act(() => user.click(open))
+        let dialog = screen.getByRole("dialog")
+        expect(dialog).not.toBeNull()
+        let close = screen.getByRole("button", { name: "Close" })
+        await act(() => user.click(close))
+        await waitFor(() => {
+            let dialog2 = screen.queryByRole("dialog")
+            expect(dialog2).toBeNull()
+        })
+    })
 })
