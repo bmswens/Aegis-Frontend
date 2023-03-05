@@ -81,6 +81,10 @@ function TeamCard(props) {
     // dialog
     const [infoOpen, setInfoOpen] = React.useState(false)
 
+    React.useEffect(() => {
+        return () => setInfoOpen(false)
+    }, [])
+
     return (
         <Grid item xs={12}>
             <Card>
