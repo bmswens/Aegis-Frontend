@@ -3,6 +3,7 @@ import React from 'react'
 
 // MUI
 import { Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Stack, TextField } from '@mui/material'
+import { Link } from 'react-router-dom'
 
 function AdminChip(props) {
     const {
@@ -11,13 +12,13 @@ function AdminChip(props) {
     } = props
 
     return (
-        <Chip
-            label={name}
-            color="primary"
-            component="a"
-            href={`/people?search=${id}`}
-            clickable
-        />
+        <Link to={`/people?search=${id}`} style={{ textDecoration: "none", color: "inherit" }}>
+            <Chip
+                label={name}
+                color="primary"
+                clickable
+            />
+        </Link>
     )
 }
 
