@@ -3,6 +3,7 @@ import { faker } from '@faker-js/faker'
 function makeFakePerson(seed) {
 
     return {
+        id: faker.datatype.uuid(),
         firstName: faker.name.firstName(),
         lastName: faker.name.lastName(),
         title: faker.name.jobTitle(),

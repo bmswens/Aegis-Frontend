@@ -87,4 +87,15 @@ describe('<TeamCard>', function() {
             expect(dialog2).toBeNull()
         })
     })
+    it("should hide the link to more details if turned off", function() {
+        render(
+            <BrowserRouter>
+                <TeamCard
+                    noLink
+                />
+            </BrowserRouter>
+        )
+        let button = screen.queryByRole("button", { name: "Details" })
+        expect(button).toBeNull()
+    })
 })

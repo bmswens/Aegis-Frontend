@@ -8,6 +8,7 @@ import Home from './Home'
 import People from './people/People'
 import OrgChart from './org-chart/OrgChart'
 import Teams from './teams/Teams'
+import DetailedTeamPage from './teams/DetailedTeamPage'
 
 function ContentGrid(props) {
 
@@ -45,6 +46,10 @@ function Content(props) {
             <Route
                 path="/teams"
                 element={<Teams />}
+            />
+            <Route
+                path="/teams/:uuid"
+                element={<DetailedTeamPage />}
             />
         </Routes>
     )

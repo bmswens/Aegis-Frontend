@@ -69,10 +69,28 @@ async function getOrgChart(orgId) {
     return rootNode
 }
 
+async function getDetailedOrg(uuid) {
+    let org = makeMockOrg()
+    org.people = []
+    for (let i = 0; i < org.memberCount; i++) {
+        let person = makeFakePerson()
+        if (org.people.length) {
+            let supervisor = org.people[faker.datatype.number({min: 0, max: org.people.length - 1})]
+            person.supervisor = `${supervisor.firstName} ${supervisor.lastName}`
+        }
+        else {
+            person.supervisor = "Enlisted Jesus"
+        }
+        org.people.push(person)
+    }
+    return org
+}
+
 const org = {
     getShortOrgs,
     getOrgChart,
-    getOrgs
+    getOrgs,
+    getDetailedOrg
 }
 
 export default org

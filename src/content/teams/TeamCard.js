@@ -60,7 +60,8 @@ function TeamCard(props) {
         address,
         email,
         phone,
-        admins
+        admins,
+        noLink
     } = props
 
     let addressURL = ""
@@ -114,11 +115,13 @@ function TeamCard(props) {
                             <InfoIcon fontSize="large" />
                         </IconButton>
                     </Tooltip>
-                    <LinkButton
-                        title="Details"
-                        to={`/teams/${id}`}
-                        icon={<LaunchIcon fontSize="large" />}
-                    />
+                    { noLink ? null : 
+                        <LinkButton
+                            title="Details"
+                            to={`/teams/${id}`}
+                            icon={<LaunchIcon fontSize="large" />}
+                        />
+                    }
                     <Box sx={{flexGrow: 1}} />
                     <LinkButton
                         external
