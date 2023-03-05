@@ -1,5 +1,9 @@
 # Aegis-Frontend
 [![Demo](https://img.shields.io/badge/Demo-Live-brightgreen)](https://bmswens.github.io/Aegis-Frontend/)
+[![Test](https://github.com/bmswens/Aegis-Frontend/actions/workflows/test.yml/badge.svg)](https://github.com/bmswens/Aegis-Frontend/actions/workflows/test.yml)
+[![Coverage Status](https://coveralls.io/repos/github/bmswens/Aegis-Frontend/badge.svg?branch=main)](https://coveralls.io/github/bmswens/Aegis-Frontend?branch=main)
+[![Deploy](https://github.com/bmswens/Aegis-Frontend/actions/workflows/deploy.yml/badge.svg)](https://github.com/bmswens/Aegis-Frontend/actions/workflows/deploy.yml)
+
 ---
 
 ## About
