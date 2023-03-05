@@ -120,7 +120,8 @@ function PersonCard(props) {
     
     return (
         <Grid item xs={12}>
-            <Card>
+            <Card
+            >
                 <CardHeader
                     title={`${firstName} ${lastName}`}
                     subheader={title}

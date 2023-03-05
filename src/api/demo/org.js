@@ -2,12 +2,7 @@ import { faker } from '@faker-js/faker'
 import { makeFakePerson } from './people'
 
 async function getShortOrgs() {
-    let output = [
-        {
-            name: "Demo Org",
-            id: faker.datatype.uuid()
-        }
-    ]
+    let output = []
     for (let i = 0; i < faker.datatype.number({min: 5, max: 42}); i++ ) {
         let fakeOrg = {
             name: `${faker.commerce.department()} Department`,

@@ -2,7 +2,12 @@
 import React from 'react'
 
 // MUI
-import { Autocomplete, Card, CardContent, Grid, LinearProgress, TextField } from '@mui/material'
+import { useTheme } from '@emotion/react'
+import { Autocomplete, Box, Card, CardActions, CardContent, Grid, IconButton, LinearProgress, TextField, useMediaQuery } from '@mui/material'
+
+// MUI Icons
+import ZoomOutIcon from '@mui/icons-material/ZoomOut'
+import ZoomInIcon from '@mui/icons-material/ZoomIn'
 
 // org chart
 import OrganizationChart from "@dabeng/react-orgchart"
@@ -20,8 +25,60 @@ function OrgChartPersonCard(props) {
     )
 }
 
+function ZoomSection(props) {
+    // We're lumping small screens and mobile together
+    const { data } = props
+    const theme = useTheme()
+    const isSmall = useMediaQuery(theme.breakpoints.down("md"))
+
+    const [scale, setScale] = React.useState(isSmall ? 0.4 : 1)
+
+    React.useEffect(() => {
+        if (!isSmall) {
+            return
+        }
+        let nodes = document.getElementsByClassName("orgchart chart")
+        if (!nodes.length) {
+            return
+        }
+        let chart = nodes[0]
+        chart.style.transform = `matrix(${scale}, 0, 0, ${scale}, 0, 0)`
+    }, [scale, isSmall])
+
+    React.useEffect(() => {
+        if (!isSmall) {
+            return
+        }
+    }, [data, setScale, isSmall])
+
+    if (!isSmall) {
+        return null
+    }
+
+    return (
+        <CardActions>
+            <Box sx={{flexGrow: 1}} />
+            <IconButton
+                aria-label="Zoom Out"
+                onClick={() => setScale(scale - 0.1)}
+                disabled={!data.firstName || scale <= 0.2}
+            >
+                <ZoomOutIcon fontSize="large" />
+            </IconButton>
+            <IconButton
+                aria-label="Zoom In"
+                disabled={!data.firstName}
+                onClick={() => setScale(scale + 0.1)}
+            >
+                <ZoomInIcon fontSize="large" />
+            </IconButton>
+        </CardActions>
+    )
+}
+
 function OrgSelection(props) {
     const {
+        data,
         setData
     } = props
 
@@ -52,6 +109,9 @@ function OrgSelection(props) {
         if (loading && selected) {
             load()
         }
+        else if (loading && !selected) {
+            setLoading(false)
+        }
     }, [loading, selected, setData])
 
     return (
@@ -67,6 +127,9 @@ function OrgSelection(props) {
                         renderInput={params => <TextField {...params} label="Team" />}
                     />
                 </CardContent>
+                <ZoomSection
+                    data={data}
+                />
                 {loading ? <LinearProgress /> : null}
             </Card>
         </Grid>
@@ -80,6 +143,7 @@ function OrgChart(props) {
     return (
         <ContentGrid>
             <OrgSelection
+                data={data}
                 setData={setData}
             />
             { data.firstName ?
