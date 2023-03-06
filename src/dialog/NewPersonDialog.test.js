@@ -27,10 +27,25 @@ describe('<NewPersonDialog>', function() {
             title: "User",
             address: "Location",
             email: "email@mail.com",
-            phone: "911"
+            phone: "911",
+            supervisor: "supervisor id",
+            team: "team id"
         }
         let user = userEvent.setup()
         let spy = jest.spyOn(api.people, "addPerson")
+        // mock dat api
+        api.people.getShortPeople = jest.fn().mockResolvedValue([
+            {
+                name: "Brandon Swenson",
+                id: "supervisor id"
+            }
+        ])
+        api.org.getShortOrgs = jest.fn().mockResolvedValue([
+            {
+                name: "Dev Team",
+                id: "team id"
+            }
+        ])
         render(
             <NewPersonDialog
                 open={true}
@@ -68,6 +83,14 @@ describe('<NewPersonDialog>', function() {
             let textBox = screen.getByLabelText(entry.label)
             await act(async () => await user.type(textBox, entry.data))
         }
+        let selectionBox = screen.getByLabelText("Team")
+        await act(() => user.click(selectionBox))
+        let org = screen.getByText("Dev Team")
+        await act(() => user.click(org))
+        let superivsorBox = screen.getByLabelText("Supervisor")
+        await act(() => user.click(superivsorBox))
+        let supervisor = screen.getByText("Brandon Swenson")
+        await act(() => user.click(supervisor))
         let submitButton = screen.getByRole("button", { name: "Submit" })
         await act(async () => await user.click(submitButton))
         // test the output

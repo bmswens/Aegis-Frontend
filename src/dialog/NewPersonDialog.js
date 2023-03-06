@@ -6,6 +6,8 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextF
 
 // custom
 import api from '../api'
+import PersonAutocomplete from '../components/PersonAutocomplete'
+import TeamAutoComplete from '../components/TeamAutocomplete'
 
 const emptyData = {
     firstName: '',
@@ -13,7 +15,9 @@ const emptyData = {
     title: '',
     address: '',
     email: '',
-    phone: ''
+    phone: '',
+    supervisor: null,
+    team: null
 }
 
 
@@ -28,7 +32,12 @@ function NewPersonDialog(props) {
     }
 
     function submit() {
-        api.people.addPerson(data)
+        let submitData = {
+            ...data,
+            supervisor: data.supervisor.id,
+            team: data.team.id
+        }
+        api.people.addPerson(submitData)
         handleClose()
     }
 
@@ -82,6 +91,14 @@ function NewPersonDialog(props) {
                         fullWidth
                         value={data.phone}
                         onChange={(event) => setData({...data, phone: event.target.value})}
+                    />
+                    <PersonAutocomplete
+                        value={data.supervisor}
+                        setValue={value => setData({...data, supervisor: value})}
+                    />
+                    <TeamAutoComplete
+                        value={data.team}
+                        setValue={value => setData({...data, team: value})}
                     />
                 </Stack>
             </DialogContent>

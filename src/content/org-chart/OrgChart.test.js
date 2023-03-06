@@ -7,9 +7,9 @@ import { BrowserRouter } from "react-router-dom"
 import OrgChart from './OrgChart'
 
 // recommended patching
-import mediaQuery from 'css-mediaquery';
-import ThemeContext from "../../context/ThemeContext";
-import api from "../../api";
+import mediaQuery from 'css-mediaquery'
+import ThemeContext from "../../context/ThemeContext"
+import api from "../../api"
 
 function createMatchMedia(width) {
   return (query) => ({

@@ -27,9 +27,22 @@ async function addPerson(person) {
     return faker.datatype.uuid()
 }
 
+async function getShortPeople() {
+    let output = []
+    for (let i = 0; i < faker.datatype.number({min: 5, max: 42}); i++) {
+        let fakePerson = makeFakePerson()
+        output.push({
+            name: fakePerson.firstName + ' ' + fakePerson.lastName,
+            id: fakePerson.id
+        })
+    }
+    return output
+}
+
 const people = {
     getPeople,
-    addPerson
+    addPerson,
+    getShortPeople
 }
 
 export default people
