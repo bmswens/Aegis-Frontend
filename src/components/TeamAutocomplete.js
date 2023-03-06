@@ -9,7 +9,7 @@ import api from '../api'
 
 function TeamAutoComplete(props) {
 
-    const {value, setValue} = props
+    const {value, setValue, disabled} = props
 
     const [loading, setLoading] = React.useState(true)
     const [teams, setTeams] = React.useState([])
@@ -25,6 +25,7 @@ function TeamAutoComplete(props) {
 
     return (
         <Autocomplete
+            disabled={disabled}
             fullWidth
             loading={loading}
             value={value}
@@ -32,6 +33,7 @@ function TeamAutoComplete(props) {
             getOptionLabel={option => option.name}
             onChange={(event, newValue) => setValue(newValue)}
             renderInput={params => <TextField {...params} label="Team" />}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
         />
     )
 }

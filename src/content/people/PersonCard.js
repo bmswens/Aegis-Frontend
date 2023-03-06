@@ -13,7 +13,7 @@ import InfoIcon from '@mui/icons-material/Info'
 
 // router 
 import { Link } from 'react-router-dom'
-import PersonInfoDialog from '../../dialog/PersonInfoDialog'
+import PersonDialog from '../../dialog/PersonDialog'
 
 function LinkButton(props) {
     const {
@@ -44,7 +44,9 @@ function PersonCardActions(props) {
         title,
         address,
         email,
-        phone
+        phone,
+        supervisor,
+        team
     } = props
 
     let addressURL = ""
@@ -93,15 +95,20 @@ function PersonCardActions(props) {
                 <CallIcon fontSize="large" />
             </LinkButton>
             {/* Dialogs */}
-            <PersonInfoDialog
+            <PersonDialog
                 open={open}
                 close={() => setOpen(false)}
-                firstName={firstName}
-                lastName={lastName}
-                title={title}
-                address={address}
-                phone={phone}
-                email={email}
+                viewOnly
+                person={{
+                    firstName,
+                    lastName,
+                    title,
+                    address,
+                    phone,
+                    email,
+                    supervisor,
+                    team
+                }}
             />
         </CardActions>
     )
@@ -115,7 +122,9 @@ function PersonCard(props) {
         title,
         address,
         email,
-        phone
+        phone,
+        supervisor,
+        team
     } = props
     
     return (
@@ -133,6 +142,8 @@ function PersonCard(props) {
                     address={address}
                     email={email}
                     phone={phone}
+                    supervisor={supervisor}
+                    team={team}
                 />
             </Card>
         </Grid>

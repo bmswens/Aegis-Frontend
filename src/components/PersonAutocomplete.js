@@ -8,7 +8,7 @@ import { Autocomplete, TextField } from '@mui/material'
 import api from '../api'
 
 function PersonAutocomplete(props) {
-    const {value, setValue} = props
+    const {value, setValue, disabled} = props
 
     const [loading, setLoading] = React.useState(true)
     const [people, setPeople] = React.useState([])
@@ -24,6 +24,7 @@ function PersonAutocomplete(props) {
 
     return (
         <Autocomplete
+            disabled={disabled}
             fullWidth
             loading={loading}
             value={value}
@@ -31,6 +32,7 @@ function PersonAutocomplete(props) {
             getOptionLabel={option => option.name}
             onChange={(event, newValue) => setValue(newValue)}
             renderInput={params => <TextField {...params} label="Supervisor" />}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
         />
     )
 }

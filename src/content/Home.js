@@ -21,7 +21,7 @@ import { Link } from 'react-router-dom'
 // custom
 import { ContentGrid } from './Content'
 import UserDialog from '../dialog/UserDialog';
-import NewPersonDialog from '../dialog/NewPersonDialog'
+import PersonDialog from '../dialog/PersonDialog'
 import TeamDialog from '../dialog/TeamDialog'
 
 
@@ -151,7 +151,7 @@ function Home(props) {
                 open={settingsOpen}
                 close={close}
             />
-            <NewPersonDialog
+            <PersonDialog
                 open={addPersonOpen}
                 close={close}
             />

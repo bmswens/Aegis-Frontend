@@ -10,6 +10,7 @@ import PersonAutocomplete from '../components/PersonAutocomplete'
 import TeamAutoComplete from '../components/TeamAutocomplete'
 
 const emptyData = {
+    id: null,
     firstName: '',
     lastName: '',
     title: '',
@@ -21,10 +22,15 @@ const emptyData = {
 }
 
 
-function NewPersonDialog(props) {
+function PersonDialog(props) {
 
-    const { open, close } = props
-    const [data, setData] = React.useState(emptyData)
+    const { 
+        open, 
+        close,
+        person,
+        viewOnly
+    } = props
+    const [data, setData] = React.useState(person || emptyData)
 
     function handleClose() {
         setData(emptyData)
@@ -37,7 +43,12 @@ function NewPersonDialog(props) {
             supervisor: data.supervisor.id,
             team: data.team.id
         }
-        api.people.addPerson(submitData)
+        if (data.id) {
+            api.people.updatePerson(submitData)
+        }
+        else {
+            api.people.addPerson(submitData)
+        }
         handleClose()
     }
 
@@ -57,46 +68,54 @@ function NewPersonDialog(props) {
                     sx={{marginTop: 1}}
                 >
                     <TextField
+                        disabled={viewOnly}
                         label="First Name"
                         fullWidth
                         value={data.firstName}
                         onChange={(event) => setData({...data, firstName: event.target.value})}
                     />
                     <TextField
+                        disabled={viewOnly}
                         label="Last Name"
                         fullWidth
                         value={data.lastName}
                         onChange={(event) => setData({...data, lastName: event.target.value})}
                     />
                     <TextField
+                        disabled={viewOnly}
                         label="Title"
                         fullWidth
                         value={data.title}
                         onChange={(event) => setData({...data, title: event.target.value})}
                     />
                     <TextField
+                        disabled={viewOnly}
                         label="Address"
                         fullWidth
                         value={data.address}
                         onChange={(event) => setData({...data, address: event.target.value})}
                     />
                     <TextField
+                        disabled={viewOnly}
                         label="Email"
                         fullWidth
                         value={data.email}
                         onChange={(event) => setData({...data, email: event.target.value})}
                     />
                     <TextField
+                        disabled={viewOnly}
                         label="Phone"
                         fullWidth
                         value={data.phone}
                         onChange={(event) => setData({...data, phone: event.target.value})}
                     />
                     <PersonAutocomplete
+                        disabled={viewOnly}
                         value={data.supervisor}
                         setValue={value => setData({...data, supervisor: value})}
                     />
                     <TeamAutoComplete
+                        disabled={viewOnly}
                         value={data.team}
                         setValue={value => setData({...data, team: value})}
                     />
@@ -107,18 +126,20 @@ function NewPersonDialog(props) {
                     onClick={handleClose}
                     variant="contained"
                 >
-                    Cancel
+                    { viewOnly ? "Close" : "Cancel" }
                 </Button>
+                { viewOnly ? null :
                 <Button
                     onClick={submit}
                     variant="contained"
                 >
                     Submit
                 </Button>
+                }
             </DialogActions>
         </Dialog>
     )
 
 }
 
-export default NewPersonDialog
+export default PersonDialog
