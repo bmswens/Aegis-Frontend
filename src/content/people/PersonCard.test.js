@@ -2,6 +2,8 @@
 import { screen, render, act, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { BrowserRouter } from 'react-router-dom'
+import api from '../../api'
+import UserContext, { demoUser, UserContextProvider } from '../../context/UserContext'
 
 // to test
 import PersonCard from './PersonCard'
@@ -91,5 +93,71 @@ describe('<PersonCard>', function() {
             let dialog2 = screen.queryByRole("dialog")
             expect(dialog2).toBeNull()
         })
+    })
+})
+
+describe("<PersonCard> as admin", function() {
+    it("should allow the admin to update info", async function() {
+        let user = userEvent.setup()
+        api.people.updatePerson = jest.fn()
+        render(
+            <UserContextProvider>
+                <BrowserRouter>
+                    <PersonCard
+                        id="a"
+                    />
+                </BrowserRouter>
+            </UserContextProvider>
+        )
+        let editButton = screen.getByRole("button", { name: "Edit Person"})
+        expect(editButton).not.toBeNull()
+        await act(() => user.click(editButton))
+        let submitButton = screen.getByRole("button", { name: "Submit" })
+        await act(() => userEvent.click(submitButton))
+        expect(api.people.updatePerson).toHaveBeenCalled()
+    })
+    it("should allow the admin to delete", async function() {
+        let user = userEvent.setup()
+        api.people.deletePerson = jest.fn()
+        render(
+            <UserContextProvider>
+                <BrowserRouter>
+                    <PersonCard
+                        id="a"
+                    />
+                </BrowserRouter>
+            </UserContextProvider>
+        )
+        let deleteButton = screen.getByRole("button", { name: "Delete Person"})
+        expect(deleteButton).not.toBeNull()
+        await act(() => user.click(deleteButton))
+        let submitButton = screen.getByRole("button", { name: "Confirm" })
+        await act(() => userEvent.click(submitButton))
+        expect(api.people.deletePerson).toHaveBeenCalledWith("a")
+    })
+})
+
+describe("<PersonCard> as non-admin", function() {
+    it("should now display the edit button", function() {
+        render(
+            <UserContext.Provider value={{...demoUser, admin: false}}>
+                <BrowserRouter>
+                    <PersonCard />
+                </BrowserRouter>
+            </UserContext.Provider>
+        )
+        let editButton = screen.queryByRole("button", { name: "Edit Person"})
+        expect(editButton).toBeNull()
+    })
+    it("should not display the delete button", function() {
+        render(
+            <UserContext.Provider value={{...demoUser, admin: false}}>
+                <BrowserRouter>
+                    <PersonCard />
+                </BrowserRouter>
+            </UserContext.Provider>
+        )
+        let editButton = screen.queryByRole("button", { name: "Delete Person"})
+        expect(editButton).toBeNull()
     })
 })

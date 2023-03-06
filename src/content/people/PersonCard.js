@@ -10,10 +10,15 @@ import EmailIcon from '@mui/icons-material/Email'
 import SmsIcon from '@mui/icons-material/Sms'
 import CallIcon from '@mui/icons-material/Call'
 import InfoIcon from '@mui/icons-material/Info'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
 
 // router 
 import { Link } from 'react-router-dom'
 import PersonDialog from '../../dialog/PersonDialog'
+import UserContext from '../../context/UserContext'
+import ConfirmDialog from '../../dialog/ConfirmDialog'
+import api from '../../api'
 
 function LinkButton(props) {
     const {
@@ -24,21 +29,84 @@ function LinkButton(props) {
 
     return (
         <Link to={url} target="_blank">
-                <Tooltip
-                    title={title}
+            <Tooltip
+                title={title}
+            >
+                <IconButton
+                    aria-label={title}
                 >
-                    <IconButton
-                        aria-label={title}
-                    >
-                        {children}
-                    </IconButton>
-                </Tooltip>
-            </Link>
+                    {children}
+                </IconButton>
+            </Tooltip>
+        </Link>
     )
+}
+
+function AdminActions(props) {
+    const {
+        id,
+        firstName,
+        lastName,
+        title,
+        address,
+        email,
+        phone,
+        supervisor,
+        team
+    } = props
+
+    let user = React.useContext(UserContext)
+
+    const [editOpen, setEditOpen] = React.useState(false)
+    const [deleteOpen, setDeleteOpen] = React.useState(false)
+
+    if (!user.admin) {
+        return null
+    }
+
+    return (
+        <>
+            <IconButton
+                aria-label="Edit Person"
+                onClick={() => setEditOpen(true)}
+            >
+                <EditIcon fontSize="large" />
+            </IconButton>
+            <IconButton
+                aria-label="Delete Person"
+                onClick={() => setDeleteOpen(true)}
+            >
+                <DeleteIcon fontSize="large" />
+            </IconButton>
+            <PersonDialog
+                open={editOpen}
+                close={() => setEditOpen(false)}
+                person={{
+                    id,
+                    firstName,
+                    lastName,
+                    title,
+                    address,
+                    phone,
+                    email,
+                    supervisor,
+                    team
+                }}
+            />
+            <ConfirmDialog
+                open={deleteOpen}
+                close={() => setDeleteOpen(false)}
+                callback={() => api.people.deletePerson(id)}
+                text={`Are you sure you want to delete the entry for ${firstName} ${lastName}?`}
+            />
+        </>
+    )
+
 }
 
 function PersonCardActions(props) {
     const {
+        id,
         firstName,
         lastName,
         title,
@@ -69,7 +137,18 @@ function PersonCardActions(props) {
                     <InfoIcon fontSize="large" />
                 </IconButton>
             </Tooltip>
-            <Box sx={{flexGrow: 1}} />
+            <AdminActions
+                id={id}
+                firstName={firstName}
+                lastName={lastName}
+                title={title}
+                address={address}
+                email={email}
+                phone={phone}
+                supervisor={supervisor}
+                team={team}
+            />
+            <Box sx={{ flexGrow: 1 }} />
             <LinkButton
                 title="View Address"
                 url={addressURL}
@@ -100,6 +179,7 @@ function PersonCardActions(props) {
                 close={() => setOpen(false)}
                 viewOnly
                 person={{
+                    id,
                     firstName,
                     lastName,
                     title,
@@ -117,6 +197,7 @@ function PersonCardActions(props) {
 function PersonCard(props) {
 
     const {
+        id,
         firstName,
         lastName,
         title,
@@ -126,7 +207,7 @@ function PersonCard(props) {
         supervisor,
         team
     } = props
-    
+
     return (
         <Grid item xs={12}>
             <Card
@@ -136,6 +217,7 @@ function PersonCard(props) {
                     subheader={title}
                 />
                 <PersonCardActions
+                    id={id}
                     firstName={firstName}
                     lastName={lastName}
                     title={title}

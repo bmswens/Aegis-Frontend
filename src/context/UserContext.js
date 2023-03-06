@@ -2,6 +2,7 @@
 import React from 'react'
 
 const demoUser = {
+    admin: true,
     loggedIn: false,
     username: "DemoUser",
     firstName: "Demo",
@@ -11,6 +12,7 @@ const demoUser = {
     phone: "123-456-7890",
     email: "demouser@example.com",
     // functions handled by the provider
+    setAdmin: /* istanbul ignore next */ admin => {},
     setUsername: /* istanbul ignore next */ name => {},
     setLoggedIn: /* istanbul ignore next */ status => {},
     setFirstName: /* istanbul ignore next */ name => {},
@@ -25,6 +27,7 @@ const UserContext = React.createContext(demoUser)
 
 function UserContextProvider(props) {
 
+    const [admin, setAdmin] = React.useState(demoUser.admin)
     const [loggedIn, setLoggedIn] = React.useState(demoUser.loggedIn)
     const [username, setUsername] = React.useState(demoUser.username)
     const [firstName, setFirstName] = React.useState(demoUser.firstName)
@@ -37,6 +40,7 @@ function UserContextProvider(props) {
     return (
         <UserContext.Provider
             value={{
+                admin,
                 loggedIn,
                 username,
                 firstName,
@@ -45,6 +49,7 @@ function UserContextProvider(props) {
                 address,
                 phone,
                 email,
+                setAdmin,
                 setUsername,
                 setLoggedIn,
                 setFirstName,

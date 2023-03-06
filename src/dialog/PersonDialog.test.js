@@ -104,7 +104,7 @@ describe('<PersonDialog> new person mode', function() {
 })
 
 describe("<PersonDialog> edit mode", function() {
-    it("should be able to update a new person", async function() {
+    it("should be able to update a person", async function() {
         let expectedPerson = {
             id: "1",
             firstName: "John",

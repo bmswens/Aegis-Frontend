@@ -21,6 +21,22 @@ const emptyData = {
     team: null
 }
 
+function makeStartData(person) {
+    if (!person) {
+        return emptyData
+    }
+    let startData = {}
+    for (let key in emptyData) {
+        if (person[key] === undefined) {
+            startData[key] = emptyData[key]
+        }
+        else {
+            startData[key] = person[key]
+        }
+    }
+    return startData
+}
+
 
 function PersonDialog(props) {
 
@@ -30,7 +46,9 @@ function PersonDialog(props) {
         person,
         viewOnly
     } = props
-    const [data, setData] = React.useState(person || emptyData)
+
+    let startData = makeStartData(person)
+    const [data, setData] = React.useState(startData)
 
     function handleClose() {
         setData(emptyData)
@@ -39,9 +57,13 @@ function PersonDialog(props) {
 
     function submit() {
         let submitData = {
-            ...data,
-            supervisor: data.supervisor.id,
-            team: data.team.id
+            ...data
+        }
+        if (data.supervisor?.id) {
+            submitData.supervisor = data.supervisor.id
+        }
+        if (data.team?.id) {
+            submitData.team = data.team.id
         }
         if (data.id) {
             api.people.updatePerson(submitData)

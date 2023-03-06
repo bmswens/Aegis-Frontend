@@ -45,11 +45,17 @@ async function getShortPeople() {
     return output
 }
 
+/* istanbul ignore next: does nothing */
+async function deletePerson(uuid) {
+    return true
+}
+
 const people = {
     getPeople,
     addPerson,
     getShortPeople,
-    updatePerson
+    updatePerson,
+    deletePerson
 }
 
 export default people
