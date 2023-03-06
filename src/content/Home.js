@@ -22,6 +22,7 @@ import { Link } from 'react-router-dom'
 import { ContentGrid } from './Content'
 import UserDialog from '../dialog/UserDialog';
 import NewPersonDialog from '../dialog/NewPersonDialog'
+import TeamDialog from '../dialog/TeamDialog'
 
 
 function AppButton(props) {
@@ -88,7 +89,9 @@ function Home(props) {
 
     const [addPersonOpen, setAddPersonOpen] = React.useState(false)
     const [settingsOpen, setSettingsOpen] = React.useState(false)
+    const [teamOpen, setTeamOpen] = React.useState(false)
     function close() {
+        setTeamOpen(false)
         setAddPersonOpen(false)
         setSettingsOpen(false)
     }
@@ -116,9 +119,9 @@ function Home(props) {
                 link="/teams"
             />
             <AppButton
-                disabled
                 title="Add Team"
                 icon={<GroupAddIcon sx={{ fontSize: "20vmin" }} />}
+                onClick={() => setTeamOpen(true)}
             />
             <AppButton
                 disabled
@@ -150,6 +153,10 @@ function Home(props) {
             />
             <NewPersonDialog
                 open={addPersonOpen}
+                close={close}
+            />
+            <TeamDialog
+                open={teamOpen}
                 close={close}
             />
         </ContentGrid>

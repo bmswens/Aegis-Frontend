@@ -34,14 +34,23 @@ describe("<Home>", function() {
             expect(goneDialog).toBeNull()
         })
     })
-    it('should have a button to create a new team', function() {
+    it('should have a button to create a new team', async function() {
+        let user = userEvent.setup()
         render(
             <BrowserRouter>
                 <Home />
             </BrowserRouter>
         )
         let button = screen.getByRole("button", { name: "Add Team"})
-        expect(button).not.toBeNull()
+        await act(async () => await user.click(button))
+        let dialog = screen.getByRole("dialog", { name: "Add New Team"})
+        expect(dialog).not.toBeNull()
+        let closeButton = screen.getByRole("button", { name: "Cancel" })
+        await act(async () => await userEvent.click(closeButton))
+        await waitFor(() => {
+            let goneDialog = screen.queryByRole("dialog", { name: "Add New Team"})
+            expect(goneDialog).toBeNull()
+        })
     })
     it('should have a button to nav to people', function() {
         render(

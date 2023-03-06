@@ -86,11 +86,16 @@ async function getDetailedOrg(uuid) {
     return org
 }
 
+async function addTeam(team) {
+    return faker.datatype.uuid()
+}
+
 const org = {
     getShortOrgs,
     getOrgChart,
     getOrgs,
-    getDetailedOrg
+    getDetailedOrg,
+    addTeam
 }
 
 export default org
