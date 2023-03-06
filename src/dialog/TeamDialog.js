@@ -6,6 +6,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextF
 import api from '../api'
 
 const emptyTeam = {
+    id: null,
     name: "",
     address: "",
     email: "",
@@ -14,15 +15,24 @@ const emptyTeam = {
 
 function TeamDialog(props) {
 
-    const { open, close } = props
-    const [data, setData] = React.useState(emptyTeam)
+    const { open, close, team } = props
+    let startData = emptyTeam
+    if (team?.id) {
+        startData = team
+    }
+    const [data, setData] = React.useState(startData)
 
     function handleClose() {
-        setData(emptyTeam)
+        if (!team?.id) {
+            setData(emptyTeam)
+        }
         close()
     }
 
     async function submit() {
+        if (team?.id) {
+            await api.org.editTeam(data)
+        }
         await api.org.addTeam(data)
         handleClose()
     }
@@ -35,7 +45,7 @@ function TeamDialog(props) {
             onClose={handleClose}
         >
             <DialogTitle align="center">
-                Add New Team
+                {team?.id ? "Edit Team" : "Add New Team"}
             </DialogTitle>
             <DialogContent>
                 <Stack
@@ -45,7 +55,7 @@ function TeamDialog(props) {
                     <TextField
                         label="Name"
                         fullWidth
-                        value={data.firstName}
+                        value={data.name}
                         onChange={(event) => setData({...data, name: event.target.value})}
                     />
                     <TextField

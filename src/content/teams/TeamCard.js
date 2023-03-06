@@ -10,10 +10,57 @@ import EmailIcon from '@mui/icons-material/Email'
 import CallIcon from '@mui/icons-material/Call'
 import InfoIcon from '@mui/icons-material/Info'
 import LaunchIcon from '@mui/icons-material/Launch'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
 
 // router dom
 import { Link } from 'react-router-dom'
 import TeamQuickInfoDialog from './TeamQuickInfoDialog'
+import UserContext from '../../context/UserContext'
+import TeamDialog from '../../dialog/TeamDialog'
+import ConfirmDialog from '../../dialog/ConfirmDialog'
+import api from '../../api'
+
+function AdminActions(props) {
+
+    const { team } = props
+    const user = React.useContext(UserContext)
+
+    const [editOpen, setEditOpen] = React.useState(false)
+    const [deleteOpen, setDeleteOpen] = React.useState(false)
+
+    if (!user.admin) {
+        return null
+    }
+
+    return (
+        <>
+            <IconButton
+                aria-label="Edit Team"
+                onClick={() => setEditOpen(true)}
+            >
+                <EditIcon fontSize="large" />
+            </IconButton>
+            <IconButton
+                aria-label="Delete Team"
+                onClick={() => setDeleteOpen(true)}
+            >
+                <DeleteIcon fontSize="large" />
+            </IconButton>
+            <TeamDialog
+                open={editOpen}
+                close={() => setEditOpen(false)}
+                team={team}
+            />
+            <ConfirmDialog
+                open={deleteOpen}
+                close={() => setDeleteOpen(false)}
+                callback={() => api.org.deleteTeam(team.id)}
+                text={`Are you sure you want to delete the entry for ${team.name}?`}
+            />
+        </>
+    )
+}
 
 function LinkButton(props) {
     const { title, to, icon, external } = props
@@ -122,6 +169,15 @@ function TeamCard(props) {
                             icon={<LaunchIcon fontSize="large" />}
                         />
                     }
+                    <AdminActions
+                        team={{
+                            id,
+                            name,
+                            address,
+                            phone,
+                            email
+                        }}
+                    />
                     <Box sx={{flexGrow: 1}} />
                     <LinkButton
                         external

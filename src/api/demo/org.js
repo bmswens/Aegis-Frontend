@@ -90,12 +90,22 @@ async function addTeam(team) {
     return faker.datatype.uuid()
 }
 
+async function editTeam(team) {
+    return true
+}
+
+async function deleteTeam(uuid) {
+    return true
+}
+
 const org = {
     getShortOrgs,
     getOrgChart,
     getOrgs,
     getDetailedOrg,
-    addTeam
+    addTeam,
+    editTeam,
+    deleteTeam
 }
 
 export default org

@@ -25,6 +25,7 @@ describe('<TeamDialog> new team mode', function() {
     it("should be able to create a new team", async function() {
         let spy = jest.spyOn(api.org, "addTeam")
         let expectedTeam = {
+            id: null,
             name: "Dev Team",
             address: "The Moon",
             email: "dev@gmail.com",
@@ -65,5 +66,36 @@ describe('<TeamDialog> new team mode', function() {
         await waitFor(() => {
             expect(spy).toHaveBeenCalledWith(expectedTeam)
         })
+    })
+})
+
+describe("<TeamDialog> edit mode", function() {
+    it("should allow the user to edit the team info", async function() {
+        let startTeam = {
+            id: 1,
+            name: "Dev Team",
+            address: "The Moon",
+            email: "dev@gmail.com",
+            phone: "911"
+        }
+        let expectedTeam = {
+            ...startTeam,
+            phone: "119"
+        }
+        let user = userEvent.setup()
+        let spy = jest.spyOn(api.org, "editTeam")
+        render(
+            <TeamDialog
+                team={startTeam}
+                open={true}
+                close={jest.fn()}
+            />
+        )
+        let textBox = screen.getByLabelText("Phone")
+        await act(() => user.clear(textBox))
+        await act(async () => await user.type(textBox, "119"))
+        let submitButton = screen.getByRole("button", { name: "Submit" })
+        await act(async () => await user.click(submitButton))
+        expect(spy).toHaveBeenCalledWith(expectedTeam)
     })
 })

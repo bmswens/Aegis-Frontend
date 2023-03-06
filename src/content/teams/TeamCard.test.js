@@ -2,6 +2,8 @@
 import { screen, render, act, waitFor } from '@testing-library/react'
 import userEvent  from '@testing-library/user-event'
 import { BrowserRouter } from 'react-router-dom'
+import api from '../../api'
+import UserContext, { demoUser, UserContextProvider } from '../../context/UserContext'
 
 // to test
 import TeamCard from './TeamCard'
@@ -97,5 +99,62 @@ describe('<TeamCard>', function() {
         )
         let button = screen.queryByRole("button", { name: "Details" })
         expect(button).toBeNull()
+    })
+})
+
+describe("<TeamCard> as admin", function() {
+    it("should contain the edit modal", async function() {
+        let user = userEvent.setup()
+        render(
+            <UserContextProvider>
+                <BrowserRouter>
+                    <TeamCard 
+                        id={1}
+                    />
+                </BrowserRouter>
+            </UserContextProvider>
+        )
+        let editButton = screen.getByRole("button", { name: "Edit Team"})
+        await act(() => user.click(editButton))
+        let cancelButton = screen.getByRole("button", {name: "Cancel"})
+        await act(() => user.click(cancelButton))
+        await waitFor(() => {
+            let dialog = screen.queryByRole("dialog")
+            expect(dialog).toBeNull()
+        })
+    })
+    it("should allow the admin to delete the team", async function() {
+        let user = userEvent.setup()
+        let spy = jest.spyOn(api.org, "deleteTeam")
+        render(
+            <UserContextProvider>
+                <BrowserRouter>
+                    <TeamCard 
+                        id={1}
+                    />
+                </BrowserRouter>
+            </UserContextProvider>
+        )
+        let deleteButton = screen.getByRole("button", { name: "Delete Team"})
+        await act(() => user.click(deleteButton))
+        let confirmButton = screen.getByRole("button", {name: "Confirm"})
+        await act(() => user.click(confirmButton))
+        expect(spy).toHaveBeenCalledWith(1)
+    })
+})
+
+describe("<TeamCard> as non-admin", function() {
+    it("should not have the delete or edit buttons", function() {
+        render(
+            <UserContext.Provider value={{...demoUser, admin: false}}>
+                <BrowserRouter>
+                    <TeamCard />
+                </BrowserRouter>
+            </UserContext.Provider>
+        )
+        let editButton = screen.queryByRole("button", { name: "Edit Team"})
+        expect(editButton).toBeNull()
+        let deleteButton = screen.queryByRole("button", { name: "Delete Team"})
+        expect(deleteButton).toBeNull()
     })
 })
