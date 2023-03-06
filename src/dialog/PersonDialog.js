@@ -37,6 +37,10 @@ function makeStartData(person) {
     return startData
 }
 
+// dialog title on edit
+// info resets on edit close
+//
+
 
 function PersonDialog(props) {
 
@@ -51,7 +55,9 @@ function PersonDialog(props) {
     const [data, setData] = React.useState(startData)
 
     function handleClose() {
-        setData(emptyData)
+        if (!viewOnly && !person?.id) {
+            setData(emptyData)
+        }
         close()
     }
 
@@ -74,15 +80,23 @@ function PersonDialog(props) {
         handleClose()
     }
 
+    let title = "Add New Person"
+    if (viewOnly) {
+        title = "Person Info"
+    }
+    else if (person?.id) {
+        title = "Edit Info"
+    } 
+
     return (
         <Dialog
             maxWidth="sm"
             fullWidth
             open={open}
-            onClose={close}
+            onClose={handleClose}
         >
             <DialogTitle align="center">
-                Add New Person
+                {title}
             </DialogTitle>
             <DialogContent>
                 <Stack
