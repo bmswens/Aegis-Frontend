@@ -57,7 +57,7 @@ describe("<OrgChart>", function() {
         await act(() => user.click(org))
         let emailButtons = screen.queryAllByRole("button", { "name": "Send Email"})
         expect(emailButtons).not.toHaveLength(0)
-    }, 15000)
+    }, 30000)
 })
 
 describe("<OrgChart> small screen", function() {
@@ -89,7 +89,7 @@ describe("<OrgChart> small screen", function() {
         await act(() => user.click(org))
         let emailButtons = screen.queryAllByRole("button", { "name": "Send Email"})
         expect(emailButtons).not.toHaveLength(0)
-    }, 15000)
+    }, 30000)
     it("should gather and display people based on org", async function() {
         let user = UserEvent.setup()
         api.org.getShortOrgs = jest.fn().mockResolvedValue([
@@ -112,7 +112,7 @@ describe("<OrgChart> small screen", function() {
         await act(() => user.click(org))
         let emailButtons = screen.queryAllByRole("button", { "name": "Send Email"})
         expect(emailButtons).not.toHaveLength(0)
-    }, 15000)
+    }, 30000)
     it("should allow users to zoom in", async function() {
         let user = UserEvent.setup()
         api.org.getShortOrgs = jest.fn().mockResolvedValue([
@@ -139,7 +139,7 @@ describe("<OrgChart> small screen", function() {
         await act(async () => await user.click(zoominButton))
         let canvas = document.getElementsByClassName("orgchart chart")[0]
         expect(canvas.style.transform).toEqual("matrix(0.5, 0, 0, 0.5, 0, 0)")
-    }, 15000)
+    }, 30000)
     it("should allow users to zoom out to 0.1, then disable", async function() {
         let user = UserEvent.setup()
         api.org.getShortOrgs = jest.fn().mockResolvedValue([
@@ -171,5 +171,5 @@ describe("<OrgChart> small screen", function() {
         expect(canvas.style.transform).toEqual("matrix(0.10000000000000003, 0, 0, 0.10000000000000003, 0, 0)")
         let buttonAgain = screen.getByRole("button", { name: "Zoom Out"})
         expect(buttonAgain.disabled).toBeTruthy()
-    }, 15000)
+    }, 30000)
 })

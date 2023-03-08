@@ -30,10 +30,12 @@ describe('<People>', function() {
         api.people.getPeople = jest.fn().mockResolvedValue([
             {
                 ...demoUser,
+                id: 1,
                 firstName: "Brandon"
             },
             {
                 ...demoUser,
+                id:2,
                 firstName: "Dude",
                 email: "dude@gmail.com"
             }
@@ -60,10 +62,12 @@ describe('<People>', function() {
         api.people.getPeople = jest.fn().mockResolvedValue([
             {
                 ...demoUser,
+                id:1,
                 firstName: "Brandon"
             },
             {
                 ...demoUser,
+                id:2,
                 firstName: "Dude",
                 email: "dude@gmail.com"
             }
@@ -90,10 +94,12 @@ describe('<People>', function() {
         api.people.getPeople = jest.fn().mockResolvedValue([
             {
                 ...demoUser,
+                id: 1,
                 firstName: "Brandon"
             },
             {
                 ...demoUser,
+                id: 2,
                 firstName: "Dude",
                 email: "dude@gmail.com",
                 phone: "911"
@@ -121,10 +127,12 @@ describe('<People>', function() {
         api.people.getPeople = jest.fn().mockResolvedValue([
             {
                 ...demoUser,
+                id: 1,
                 firstName: "Brandon"
             },
             {
                 ...demoUser,
+                id: 2,
                 firstName: "Dude",
                 email: "dude@gmail.com",
                 phone: "911",
@@ -153,10 +161,12 @@ describe('<People>', function() {
         api.people.getPeople = jest.fn().mockResolvedValue([
             {
                 ...demoUser,
+                id: 1,
                 firstName: "Brandon"
             },
             {
                 ...demoUser,
+                id: 2,
                 firstName: "Dude",
                 email: "dude@gmail.com",
                 phone: "911",
@@ -191,10 +201,12 @@ describe('<People>', function() {
         api.people.getPeople = jest.fn().mockResolvedValue([
             {
                 ...demoUser,
+                id: 1,
                 firstName: "Brandon"
             },
             {
                 ...demoUser,
+                id: 2,
                 firstName: "Dude",
                 email: "dude@gmail.com",
                 phone: "911",
