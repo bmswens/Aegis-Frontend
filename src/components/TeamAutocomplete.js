@@ -25,6 +25,7 @@ function TeamAutoComplete(props) {
 
     return (
         <Autocomplete
+            multiple
             disabled={disabled}
             fullWidth
             loading={loading}

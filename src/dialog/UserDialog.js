@@ -2,10 +2,96 @@
 import React from 'react'
 
 // MUI
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Tooltip } from '@mui/material'
+
+// MUI icons
+import DownloadIcon from '@mui/icons-material/Download'
+import UploadIcon from '@mui/icons-material/Upload'
+
+// local storage
+import useLocalStorage from 'use-local-storage'
 
 // custom
 import UserContext from '../context/UserContext'
+import api from '../api'
+import { importDB, exportDB } from "dexie-export-import"
+
+function StorageOptions(props) {
+
+    const [driver, setDriver] = useLocalStorage("storageDriver", "demo")
+
+    async function handleDownload() {
+        let blob = await exportDB(api.db, { prettyJson: true })
+        let url = window.URL.createObjectURL(blob)
+        let a = document.createElement("a")
+        a.download = "aegis.json"
+        a.href = url
+        a.click()
+        window.URL.revokeObjectURL(url)
+    }
+
+    function clickUpload() {
+        let up = document.getElementById("database-input")
+        up.click()
+    }
+
+    async function handleUpload(event) {
+        let file = event.target.files[0]
+        await importDB(file, {overwriteValues: true})
+    }
+
+    return (
+        <>
+            <Divider>
+                Storage Options
+            </Divider>
+            <FormControl fullWidth>
+                <InputLabel id="storage-driver-label">Storage Driver</InputLabel>
+                <Select
+                    labelId="storage-driver-label"
+                    label="Storage Driver"
+                    value={driver}
+                    onChange={event => setDriver(event.target.value)}
+                >
+                    <MenuItem value={"demo"}>Demo</MenuItem>
+                    <MenuItem value={"local"}>Local Storage (offline)</MenuItem>
+                </Select>
+            </FormControl>
+            <Stack
+                direction="row"
+                spacing={1}
+                justifyContent="center"
+            >
+                <Tooltip
+                    title="Download Database"
+                >
+                    <span>
+                        <IconButton
+                            disabled={driver !== "local"}
+                            onClick={handleDownload}
+                        >
+                            <DownloadIcon fontSize="large" />
+                        </IconButton>
+
+                    </span>
+                </Tooltip>
+                <Tooltip
+                    title="Upload Database"
+                >
+                    <span>
+                    <IconButton
+                        disabled={driver !== "local"}
+                        onClick={clickUpload}
+                    >
+                        <UploadIcon fontSize="large" />
+                    </IconButton>
+                    <input id="database-input" type="file" onChange={handleUpload} style={{display: "none"}} />
+                    </span>
+                </Tooltip>
+            </Stack>
+        </>
+    )
+}
 
 function UserDialog(props) {
 
@@ -78,12 +164,13 @@ function UserDialog(props) {
             fullWidth
             open={open}
             onClose={handleClose}
+            scroll="body"
         >
             <DialogTitle align="center">
                 User Settings
             </DialogTitle>
             <DialogContent>
-                <Stack spacing={1} sx={{marginTop: 1}}>
+                <Stack spacing={1} sx={{ marginTop: 1 }}>
                     <TextField
                         label="Username"
                         fullWidth
@@ -126,6 +213,7 @@ function UserDialog(props) {
                         value={email}
                         onChange={event => setEmail(event.target.value)}
                     />
+                    <StorageOptions />
                 </Stack>
             </DialogContent>
             <DialogActions>

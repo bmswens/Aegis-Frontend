@@ -128,7 +128,7 @@ function People(props)  {
             { loading ?
                 [1, 2, 3, 4, 5].map(n => <LoadingSkeleton key={n} />)
                 :
-                toDisplay.map(person => <PersonCard key={person.email} {...person} />)
+                toDisplay.map(person => <PersonCard key={person.id} {...person} />)
             }
         </ContentGrid>
     )

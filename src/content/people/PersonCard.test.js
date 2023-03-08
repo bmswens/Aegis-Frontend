@@ -76,24 +76,6 @@ describe('<PersonCard>', function() {
         let actual = screen.getByRole("button", { name: "Call"})
         expect(actual).not.toBeNull()
     })
-    it("should open and close the more info dialog", async function() {
-        let user = userEvent.setup()
-        render(
-            <BrowserRouter>
-                <PersonCard />
-            </BrowserRouter>
-        )
-        let open = screen.getByRole("button", { name: "More Info" })
-        await act(() => user.click(open))
-        let dialog = screen.getByRole("dialog")
-        expect(dialog).not.toBeNull()
-        let close = screen.getByRole("button", { name: "Close" })
-        await act(() => user.click(close))
-        await waitFor(() => {
-            let dialog2 = screen.queryByRole("dialog")
-            expect(dialog2).toBeNull()
-        })
-    })
 })
 
 describe("<PersonCard> as admin", function() {
@@ -159,5 +141,25 @@ describe("<PersonCard> as non-admin", function() {
         )
         let editButton = screen.queryByRole("button", { name: "Delete Person"})
         expect(editButton).toBeNull()
+    })
+    it("should open and close the more info dialog", async function() {
+        let user = userEvent.setup()
+        render(
+            <UserContext.Provider value={{...demoUser, admin: false}}>
+            <BrowserRouter>
+                <PersonCard />
+            </BrowserRouter>
+            </UserContext.Provider>
+        )
+        let open = screen.getByRole("button", { name: "More Info" })
+        await act(() => user.click(open))
+        let dialog = screen.getByRole("dialog")
+        expect(dialog).not.toBeNull()
+        let close = screen.getByRole("button", { name: "Close" })
+        await act(() => user.click(close))
+        await waitFor(() => {
+            let dialog2 = screen.queryByRole("dialog")
+            expect(dialog2).toBeNull()
+        })
     })
 })

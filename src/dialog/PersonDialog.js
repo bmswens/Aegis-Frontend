@@ -18,7 +18,7 @@ const emptyData = {
     email: '',
     phone: '',
     supervisor: null,
-    team: null
+    teams: []
 }
 
 function makeStartData(person) {
@@ -36,11 +36,6 @@ function makeStartData(person) {
     }
     return startData
 }
-
-// dialog title on edit
-// info resets on edit close
-//
-
 
 function PersonDialog(props) {
 
@@ -68,8 +63,8 @@ function PersonDialog(props) {
         if (data.supervisor?.id) {
             submitData.supervisor = data.supervisor.id
         }
-        if (data.team?.id) {
-            submitData.team = data.team.id
+        if (data.teams.length) {
+            submitData.teams = data.teams.map(team => team.id)
         }
         if (data.id) {
             api.people.updatePerson(submitData)
@@ -152,8 +147,8 @@ function PersonDialog(props) {
                     />
                     <TeamAutoComplete
                         disabled={viewOnly}
-                        value={data.team}
-                        setValue={value => setData({...data, team: value})}
+                        value={data.teams}
+                        setValue={value => setData({...data, teams: value})}
                     />
                 </Stack>
             </DialogContent>

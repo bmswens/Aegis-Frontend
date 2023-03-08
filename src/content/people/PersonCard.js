@@ -52,7 +52,7 @@ function AdminActions(props) {
         email,
         phone,
         supervisor,
-        team
+        teams
     } = props
 
     let user = React.useContext(UserContext)
@@ -90,7 +90,7 @@ function AdminActions(props) {
                     phone,
                     email,
                     supervisor,
-                    team
+                    teams
                 }}
             />
             <ConfirmDialog
@@ -114,8 +114,10 @@ function PersonCardActions(props) {
         email,
         phone,
         supervisor,
-        team
+        teams
     } = props
+
+    const user = React.useContext(UserContext)
 
     let addressURL = ""
     if (address) {
@@ -127,6 +129,7 @@ function PersonCardActions(props) {
 
     return (
         <CardActions>
+            {!user.admin ? 
             <Tooltip
                 title="More Info"
             >
@@ -137,6 +140,9 @@ function PersonCardActions(props) {
                     <InfoIcon fontSize="large" />
                 </IconButton>
             </Tooltip>
+            :
+            null
+            }
             <AdminActions
                 id={id}
                 firstName={firstName}
@@ -146,7 +152,7 @@ function PersonCardActions(props) {
                 email={email}
                 phone={phone}
                 supervisor={supervisor}
-                team={team}
+                teams={teams}
             />
             <Box sx={{ flexGrow: 1 }} />
             <LinkButton
@@ -187,7 +193,7 @@ function PersonCardActions(props) {
                     phone,
                     email,
                     supervisor,
-                    team
+                    teams
                 }}
             />
         </CardActions>
@@ -205,7 +211,7 @@ function PersonCard(props) {
         email,
         phone,
         supervisor,
-        team
+        teams
     } = props
 
     return (
@@ -225,7 +231,7 @@ function PersonCard(props) {
                     email={email}
                     phone={phone}
                     supervisor={supervisor}
-                    team={team}
+                    teams={teams}
                 />
             </Card>
         </Grid>

@@ -102,7 +102,7 @@ function OrgSelection(props) {
 
     React.useEffect(() => {
         async function load() {
-            let chartData = await api.org.getOrgChart(selected)
+            let chartData = await api.org.getOrgChart(selected.id)
             setData(chartData)
             setLoading(false)
         }

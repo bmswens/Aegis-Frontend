@@ -32,7 +32,7 @@ describe('<PersonDialog> new person mode', function() {
             email: "email@mail.com",
             phone: "911",
             supervisor: "supervisor id",
-            team: "team id"
+            teams: ["team id"]
         }
         let user = userEvent.setup()
         let spy = jest.spyOn(api.people, "addPerson")
@@ -114,7 +114,7 @@ describe("<PersonDialog> edit mode", function() {
             email: "email@mail.com",
             phone: "911",
             supervisor: "supervisor id",
-            team: "team id"
+            teams: ["team id"]
         }
         let user = userEvent.setup()
         let spy = jest.spyOn(api.people, "updatePerson")
@@ -140,10 +140,10 @@ describe("<PersonDialog> edit mode", function() {
                         name: "Brandon Swenson",
                         id: "supervisor id"
                     },
-                    team: {
+                    teams: [{
                         name: "Dev Team",
                         id: "team id"
-                    }
+                    }]
                 }}
                 open={true}
                 close={jest.fn()}

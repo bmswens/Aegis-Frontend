@@ -138,6 +138,9 @@ function TeamCard(props) {
             <Card>
                 <CardHeader
                     title={name}
+                    titleTypographyProps={{
+                        variant: "h5"
+                    }}
                     avatar={
                     <Tooltip
                         title="Member Count"
