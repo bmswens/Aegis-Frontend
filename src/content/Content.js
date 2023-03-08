@@ -1,14 +1,16 @@
 // React
-import React from 'react'
+import React, {Suspense, lazy} from 'react'
 
 // MUI
-import { Grid } from '@mui/material'
+import { Grid, LinearProgress } from '@mui/material'
 import { Route, Routes } from 'react-router-dom'
-import Home from './Home'
-import People from './people/People'
-import OrgChart from './org-chart/OrgChart'
-import Teams from './teams/Teams'
-import DetailedTeamPage from './teams/DetailedTeamPage'
+
+// lazy loads
+const Home = lazy(() => import('./Home'))
+const People = lazy(() => import('./people/People'))
+const OrgChart = lazy(() => import('./org-chart/OrgChart'))
+const Teams = lazy(() => import('./teams/Teams'))
+const DetailedTeamPage = lazy(() => import('./teams/DetailedTeamPage'))
 
 function ContentGrid(props) {
 
@@ -30,28 +32,30 @@ function ContentGrid(props) {
 function Content(props) {
 
     return (
-        <Routes>
-            <Route
-                path="/"
-                element={<Home />}
-            />
-            <Route
-                path="/people"
-                element={<People />}
-            />
-            <Route
-                path="/org-chart"
-                element={<OrgChart />}
-            />
-            <Route
-                path="/teams"
-                element={<Teams />}
-            />
-            <Route
-                path="/teams/:uuid"
-                element={<DetailedTeamPage />}
-            />
-        </Routes>
+        <Suspense fallback={<LinearProgress />}>
+            <Routes>
+                <Route
+                    path="/"
+                    element={<Home />}
+                />
+                <Route
+                    path="/people"
+                    element={<People />}
+                />
+                <Route
+                    path="/org-chart"
+                    element={<OrgChart />}
+                />
+                <Route
+                    path="/teams"
+                    element={<Teams />}
+                />
+                <Route
+                    path="/teams/:uuid"
+                    element={<DetailedTeamPage />}
+                />
+            </Routes>
+        </Suspense>
     )
 }
 
