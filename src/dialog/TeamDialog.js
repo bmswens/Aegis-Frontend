@@ -33,7 +33,9 @@ function TeamDialog(props) {
         if (team?.id) {
             await api.org.editTeam(data)
         }
-        await api.org.addTeam(data)
+        else {
+            await api.org.addTeam(data)
+        }
         handleClose()
     }
 
