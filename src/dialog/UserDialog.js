@@ -11,23 +11,23 @@ import UploadIcon from '@mui/icons-material/Upload'
 // local storage
 import useLocalStorage from 'use-local-storage'
 
+// file download
+// tests just weren't working
+import fileDownload from 'js-file-download'
+
 // custom
 import UserContext from '../context/UserContext'
-import api from '../api'
+import { getAPI } from '../api'
 import { importDB, exportDB } from "dexie-export-import"
 
 function StorageOptions(props) {
 
     const [driver, setDriver] = useLocalStorage("storageDriver", "demo")
+    const api = getAPI()
 
     async function handleDownload() {
         let blob = await exportDB(api.db, { prettyJson: true })
-        let url = window.URL.createObjectURL(blob)
-        let a = document.createElement("a")
-        a.download = "aegis.json"
-        a.href = url
-        a.click()
-        window.URL.revokeObjectURL(url)
+        fileDownload(blob, 'aegis.json')
     }
 
     function clickUpload() {
@@ -69,6 +69,7 @@ function StorageOptions(props) {
                         <IconButton
                             disabled={driver !== "local"}
                             onClick={handleDownload}
+                            aria-label="Download Database"
                         >
                             <DownloadIcon fontSize="large" />
                         </IconButton>
@@ -82,6 +83,7 @@ function StorageOptions(props) {
                     <IconButton
                         disabled={driver !== "local"}
                         onClick={clickUpload}
+                        aria-label="Upload Database"
                     >
                         <UploadIcon fontSize="large" />
                     </IconButton>

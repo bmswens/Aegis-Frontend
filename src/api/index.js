@@ -6,4 +6,14 @@ if (JSON.parse(window.localStorage.getItem("storageDriver")) === "local") {
     api = local
 }
 
+function getAPI() {
+    if (JSON.parse(window.localStorage.getItem("storageDriver")) === "local") {
+        return local
+    }
+    return demo
+}
+
 export default api
+export {
+    getAPI
+}
