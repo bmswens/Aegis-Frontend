@@ -34,3 +34,7 @@ Play with the application [here](https://bmswens.github.io/Aegis-Frontend/).
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
+## Design Choices
+- Why write a custom `<APIContextProvider>` over using [Dexie's `useLiveQuery()`](https://dexie.org/docs/dexie-react-hooks/useLiveQuery())?
+  - It will provide an easier interface to integrate in with a custom backend, once that's built.
