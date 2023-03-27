@@ -8,25 +8,21 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, For
 import DownloadIcon from '@mui/icons-material/Download'
 import UploadIcon from '@mui/icons-material/Upload'
 
-// local storage
-import useLocalStorage from 'use-local-storage'
-
 // file download
 // tests just weren't working
 import fileDownload from 'js-file-download'
 
 // custom
 import UserContext from '../context/UserContext'
-import { getAPI } from '../api'
 import { importDB, exportDB } from "dexie-export-import"
+import APIContext from '../context/APIContext'
 
 function StorageOptions(props) {
 
-    const [driver, setDriver] = useLocalStorage("storageDriver", "demo")
-    const api = getAPI()
+    const apiContext = React.useContext(APIContext)
 
     async function handleDownload() {
-        let blob = await exportDB(api.db, { prettyJson: true })
+        let blob = await exportDB(apiContext.api.db, { prettyJson: true })
         fileDownload(blob, 'aegis.json')
     }
 
@@ -40,6 +36,10 @@ function StorageOptions(props) {
         await importDB(file, {overwriteValues: true})
     }
 
+    function handleDriver(event) {
+        apiContext.setStorageDriver(event.target.value)
+    }
+
     return (
         <>
             <Divider>
@@ -50,8 +50,8 @@ function StorageOptions(props) {
                 <Select
                     labelId="storage-driver-label"
                     label="Storage Driver"
-                    value={driver}
-                    onChange={event => setDriver(event.target.value)}
+                    value={apiContext.storageDriver}
+                    onChange={handleDriver}
                 >
                     <MenuItem value={"demo"}>Demo</MenuItem>
                     <MenuItem value={"local"}>Local Storage (offline)</MenuItem>
@@ -67,7 +67,7 @@ function StorageOptions(props) {
                 >
                     <span>
                         <IconButton
-                            disabled={driver !== "local"}
+                            disabled={apiContext.storageDriver !== "local"}
                             onClick={handleDownload}
                             aria-label="Download Database"
                         >
@@ -81,7 +81,7 @@ function StorageOptions(props) {
                 >
                     <span>
                     <IconButton
-                        disabled={driver !== "local"}
+                        disabled={apiContext.storageDriver !== "local"}
                         onClick={clickUpload}
                         aria-label="Upload Database"
                     >
@@ -99,6 +99,7 @@ function UserDialog(props) {
 
     const { open, close } = props
     const userContext = React.useContext(UserContext)
+    const apiContext = React.useContext(APIContext)
 
     const [firstName, setFirstName] = React.useState(userContext.firstName)
     const [lastName, setLastName] = React.useState(userContext.lastName)
@@ -173,7 +174,11 @@ function UserDialog(props) {
             </DialogTitle>
             <DialogContent>
                 <Stack spacing={1} sx={{ marginTop: 1 }}>
-                    <TextField
+                    {
+                        apiContext.storageDriver === "demo" ?
+                        <>
+                        
+                        <TextField
                         label="Username"
                         fullWidth
                         disabled
@@ -215,6 +220,16 @@ function UserDialog(props) {
                         value={email}
                         onChange={event => setEmail(event.target.value)}
                     />
+                        </>
+                    :
+                    <TextField
+                        label="Username"
+                        fullWidth
+                        value="Local Storage User"
+                        disabled
+                    />
+                    }
+                    
                     <StorageOptions />
                 </Stack>
             </DialogContent>

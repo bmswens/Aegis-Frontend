@@ -3,6 +3,7 @@ import { screen, render, act, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { BrowserRouter } from 'react-router-dom'
 import api from '../../api'
+import APIContext from '../../context/APIContext'
 import UserContext, { demoUser, UserContextProvider } from '../../context/UserContext'
 
 // to test
@@ -100,14 +101,24 @@ describe("<PersonCard> as admin", function() {
     })
     it("should allow the admin to delete", async function() {
         let user = userEvent.setup()
-        api.people.deletePerson = jest.fn()
+        let context = {
+            api: {
+                people: {
+                    deletePerson: jest.fn()
+                }
+            },
+            update: jest.fn(),
+            lastUpdated: new Date()
+        }
         render(
             <UserContextProvider>
+                <APIContext.Provider value={context}>
                 <BrowserRouter>
                     <PersonCard
                         id="a"
                     />
                 </BrowserRouter>
+                </APIContext.Provider>
             </UserContextProvider>
         )
         let deleteButton = screen.getByRole("button", { name: "Delete Person"})
@@ -115,7 +126,8 @@ describe("<PersonCard> as admin", function() {
         await act(() => user.click(deleteButton))
         let submitButton = screen.getByRole("button", { name: "Confirm" })
         await act(() => userEvent.click(submitButton))
-        expect(api.people.deletePerson).toHaveBeenCalledWith("a")
+        expect(context.api.people.deletePerson).toHaveBeenCalledWith("a")
+        expect(context.update).toHaveBeenCalled()
     })
 })
 

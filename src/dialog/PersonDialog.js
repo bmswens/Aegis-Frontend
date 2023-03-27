@@ -5,7 +5,7 @@ import React from 'react'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from '@mui/material'
 
 // custom
-import api from '../api'
+import APIContext from '../context/APIContext'
 import PersonAutocomplete from '../components/PersonAutocomplete'
 import TeamAutoComplete from '../components/TeamAutocomplete'
 
@@ -48,6 +48,7 @@ function PersonDialog(props) {
 
     let startData = makeStartData(person)
     const [data, setData] = React.useState(startData)
+    const { api } = React.useContext(APIContext)
 
     function handleClose() {
         if (!viewOnly && !person?.id) {
@@ -56,7 +57,7 @@ function PersonDialog(props) {
         close()
     }
 
-    function submit() {
+    async function submit() {
         let submitData = {
             ...data
         }
@@ -67,10 +68,10 @@ function PersonDialog(props) {
             submitData.teams = data.teams.map(team => team.id)
         }
         if (data.id) {
-            api.people.updatePerson(submitData)
+            await api.people.updatePerson(submitData)
         }
         else {
-            api.people.addPerson(submitData)
+            await api.people.addPerson(submitData)
         }
         handleClose()
     }

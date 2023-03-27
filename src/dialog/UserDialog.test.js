@@ -1,8 +1,9 @@
-// testing help
+    // testing help
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import api from '../api'
 import db from '../api/local/db'
+import APIContext, { APIContextProvider } from '../context/APIContext'
 import UserContext, { UserContextProvider } from '../context/UserContext'
 import { demoUser } from '../context/UserContext'
 
@@ -211,12 +212,14 @@ describe('<StorageOptions>', function () {
     it('should allow a user to upload a database', async function () {
         const user = userEvent.setup()
         render(
-            <UserContextProvider>
-                <UserDialog
-                    open={true}
-                    close={close}
-                />
-            </UserContextProvider>
+            <APIContext.Provider value={{storageDriver: "local", api: {db: db}}}>
+                <UserContextProvider>
+                    <UserDialog
+                        open={true}
+                        close={close}
+                    />
+                </UserContextProvider>
+            </APIContext.Provider>
         )
         let button = screen.getByRole("button", { name: "Download Database" })
         await act(() => user.click(button))
@@ -227,12 +230,14 @@ describe('<StorageOptions>', function () {
     it("should allow a user to download a database", async function () {
         const user = userEvent.setup()
         render(
-            <UserContextProvider>
-                <UserDialog
-                    open={true}
-                    close={close}
-                />
-            </UserContextProvider>
+            <APIContext.Provider value={{storageDriver: "local"}}>
+                <UserContextProvider>
+                    <UserDialog
+                        open={true}
+                        close={close}
+                    />
+                </UserContextProvider>
+            </APIContext.Provider>
         )
         let button = screen.getByRole("button", { name: "Upload Database" })
         await act(() => user.click(button))
@@ -242,19 +247,23 @@ describe('<StorageOptions>', function () {
     })
     it("should allow the user to change their driver", async function() {
         const user = userEvent.setup()
+        let change = jest.fn()
         render(
-            <UserContextProvider>
-                <UserDialog
-                    open={true}
-                    close={close}
-                />
-            </UserContextProvider>
+            <APIContext.Provider value={{storageDriver: "local", setStorageDriver: change}}>
+                <UserContextProvider>
+                    <UserDialog
+                        open={true}
+                        close={close}
+                    />
+                </UserContextProvider>
+            </APIContext.Provider>
         )
         let button = screen.getByLabelText("Storage Driver")
         await act(() => user.click(button))
-        let demo = screen.getByText("Demo")
+        let demo = screen.getByRole("option", { name: "Demo"})
         await act(() => user.click(demo))
-        let data = window.localStorage.getItem("storageDriver")
-        expect(data).toEqual('"demo"')
+        await waitFor(() => {
+            expect(change).toHaveBeenCalledWith("demo")
+        })
     })
 })

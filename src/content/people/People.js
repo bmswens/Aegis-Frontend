@@ -7,8 +7,8 @@ import { Button, Card, CardContent, Grid, Skeleton, TextField } from '@mui/mater
 // custom
 import { ContentGrid } from '../Content'
 import PersonCard from './PersonCard'
-import api from '../../api'
 import { Stack } from '@mui/system'
+import APIContext from '../../context/APIContext'
 
 function SearchBar(props) {
     const { search, setSearch } = props
@@ -67,18 +67,29 @@ function People(props)  {
 
     // data load
     const [loading, setLoading] = React.useState(true)
+    const [searching, setSearching] = React.useState(false)
     const [people, setPeople] = React.useState([])
     const [toDisplay, setToDisplay] = React.useState([])
+    const apiContext = React.useContext(APIContext)
+
+    React.useEffect(() => {
+        setPeople([])
+        setToDisplay([])
+        setLoading(true)
+    }, [apiContext.api, apiContext.lastUpdate])
 
     React.useEffect(() => {
         async function load() {
-            let p = await api.people.getPeople()
+            let p = await apiContext.api.people.getPeople()
             setPeople(p)
             setToDisplay(p)
             setLoading(false)
         }
-        load()
-    }, [])
+        if (loading) {
+            load()
+            setLoading(false)
+        }
+    }, [loading, apiContext.api])
 
     // search
     // TODO: May slow down if there are too many people.
@@ -87,12 +98,12 @@ function People(props)  {
 
     // sets the skeletons so users know something is happening
     React.useEffect(() => {
-        setLoading(true)
+        setSearching(true)
     }, [search])
 
     // we're going to use case insensitive search
     React.useEffect(() => {
-        if (people && search && loading) {
+        if (people && search && searching) {
             let lSearch = search.toLowerCase()
             let output = []
             for (let person of people) {
@@ -111,13 +122,13 @@ function People(props)  {
                 }
             }
             setToDisplay(output)
-            setLoading(false)
+            setSearching(false)
         }
-        else if (people && loading && !search) {
+        else if (people && searching && !search) {
             setToDisplay(people)
-            setLoading(false)
+            setSearching(false)
         }
-    }, [people, search, loading, setToDisplay])
+    }, [people, search, searching, setToDisplay])
 
     return (
         <ContentGrid>
@@ -125,7 +136,7 @@ function People(props)  {
                 search={search}
                 setSearch={setSearch}
             />
-            { loading ?
+            { loading || searching ?
                 [1, 2, 3, 4, 5].map(n => <LoadingSkeleton key={n} />)
                 :
                 toDisplay.map(person => <PersonCard key={person.id} {...person} />)

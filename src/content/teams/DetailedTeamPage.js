@@ -11,7 +11,7 @@ import { useParams } from 'react-router-dom'
 // custom 
 import { ContentGrid } from '../Content'
 import TeamCard from './TeamCard'
-import api from '../../api'
+import APIContext from '../../context/APIContext'
 import { LoadingSkeleton } from '../people/People'
 
 function PeopleTable(props) {
@@ -93,15 +93,22 @@ function DetailedTeamPage(props) {
     const { uuid } = useParams()
     const [loading, setLoading] = React.useState(true)
     const [team, setTeam] = React.useState({})
+    const apiContext = React.useContext(APIContext)
+
+    React.useEffect(() => {
+        setLoading(true)
+    }, [apiContext.api.driver, apiContext.lastUpdate])
 
     React.useEffect(() => {
         async function load() {
-            let t = await api.org.getDetailedOrg(uuid)
+            let t = await apiContext.api.org.getDetailedOrg(uuid)
             setTeam(t)
             setLoading(false)
         }
-        load()
-    }, [uuid])
+        if (loading) {
+            load()
+        }
+    }, [uuid, apiContext.api.org, loading])
 
     if (loading) {
         return (

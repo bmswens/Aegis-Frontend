@@ -19,15 +19,21 @@ import TeamQuickInfoDialog from './TeamQuickInfoDialog'
 import UserContext from '../../context/UserContext'
 import TeamDialog from '../../dialog/TeamDialog'
 import ConfirmDialog from '../../dialog/ConfirmDialog'
-import api from '../../api'
+import APIContext from '../../context/APIContext'
 
 function AdminActions(props) {
 
     const { team } = props
     const user = React.useContext(UserContext)
+    const apiContext = React.useContext(APIContext)
 
     const [editOpen, setEditOpen] = React.useState(false)
     const [deleteOpen, setDeleteOpen] = React.useState(false)
+
+    async function deleteTeam() {
+        await apiContext.api.org.deleteTeam(team.id)
+        apiContext.update()
+    }
 
     if (!user.admin) {
         return null
@@ -55,7 +61,7 @@ function AdminActions(props) {
             <ConfirmDialog
                 open={deleteOpen}
                 close={() => setDeleteOpen(false)}
-                callback={() => api.org.deleteTeam(team.id)}
+                callback={deleteTeam}
                 text={`Are you sure you want to delete the entry for ${team.name}?`}
             />
         </>

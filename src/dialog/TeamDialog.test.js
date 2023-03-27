@@ -7,6 +7,7 @@ import api from '../api'
 
 // to test
 import TeamDialog from './TeamDialog'
+import APIContext from '../context/APIContext'
 
 describe('<TeamDialog> new team mode', function() {
     it("should be able to cancel without submitting", async function() {
@@ -23,7 +24,7 @@ describe('<TeamDialog> new team mode', function() {
         expect(close).toHaveBeenCalled()
     })
     it("should be able to create a new team", async function() {
-        let spy = jest.spyOn(api.org, "addTeam")
+        let addTeam = jest.fn()
         let expectedTeam = {
             id: null,
             name: "Dev Team",
@@ -33,10 +34,12 @@ describe('<TeamDialog> new team mode', function() {
         }
         let user = userEvent.setup()
         render(
-            <TeamDialog
-                open={true}
-                close={jest.fn()}
-            />
+            <APIContext.Provider value={{api: {org: {addTeam: addTeam}}}}>
+                <TeamDialog
+                    open={true}
+                    close={jest.fn()}
+                />
+            </APIContext.Provider>
         )
          // a lot of data entry
          let data = [
@@ -64,7 +67,7 @@ describe('<TeamDialog> new team mode', function() {
         let submitButton = screen.getByRole("button", { name: "Submit" })
         await act(async () => await user.click(submitButton))
         await waitFor(() => {
-            expect(spy).toHaveBeenCalledWith(expectedTeam)
+            expect(addTeam).toHaveBeenCalledWith(expectedTeam)
         })
     })
 })
@@ -83,19 +86,21 @@ describe("<TeamDialog> edit mode", function() {
             phone: "119"
         }
         let user = userEvent.setup()
-        let spy = jest.spyOn(api.org, "editTeam")
+        let editTeam = jest.fn()
         render(
-            <TeamDialog
-                team={startTeam}
-                open={true}
-                close={jest.fn()}
-            />
+            <APIContext.Provider value={{api: {org: {editTeam: editTeam}}}}>
+                <TeamDialog
+                    team={startTeam}
+                    open={true}
+                    close={jest.fn()}
+                />
+            </APIContext.Provider>
         )
         let textBox = screen.getByLabelText("Phone")
         await act(() => user.clear(textBox))
         await act(async () => await user.type(textBox, "119"))
         let submitButton = screen.getByRole("button", { name: "Submit" })
         await act(async () => await user.click(submitButton))
-        expect(spy).toHaveBeenCalledWith(expectedTeam)
+        expect(editTeam).toHaveBeenCalledWith(expectedTeam)
     })
 })

@@ -18,7 +18,7 @@ import { Link } from 'react-router-dom'
 import PersonDialog from '../../dialog/PersonDialog'
 import UserContext from '../../context/UserContext'
 import ConfirmDialog from '../../dialog/ConfirmDialog'
-import api from '../../api'
+import APIContext from '../../context/APIContext'
 
 function LinkButton(props) {
     const {
@@ -56,12 +56,18 @@ function AdminActions(props) {
     } = props
 
     let user = React.useContext(UserContext)
+    let apiContext = React.useContext(APIContext)
 
     const [editOpen, setEditOpen] = React.useState(false)
     const [deleteOpen, setDeleteOpen] = React.useState(false)
 
     if (!user.admin) {
         return null
+    }
+
+    function deleteUser() {
+        apiContext.api.people.deletePerson(id)
+        apiContext.update()
     }
 
     return (
@@ -96,7 +102,7 @@ function AdminActions(props) {
             <ConfirmDialog
                 open={deleteOpen}
                 close={() => setDeleteOpen(false)}
-                callback={() => api.people.deletePerson(id)}
+                callback={deleteUser}
                 text={`Are you sure you want to delete the entry for ${firstName} ${lastName}?`}
             />
         </>

@@ -9,14 +9,16 @@ import local from '../api/local'
 const defaultContext = {
     api: demo,
     lastUpdate: new Date(),
-    update: /* istanbul ignore next */ () => {}
+    update: /* istanbul ignore next */ () => {},
+    setStorageDriver: /* istanbul ignore next */ () => {},
+    storageDriver: "demo"
 }
 
 const APIContext = React.createContext(defaultContext)
 
 function APIContextProvider(props) {
 
-    const [ storageDriver ] = useLocalStorage("storageDriver")
+    const [ storageDriver, setStorageDriver ] = useLocalStorage("storageDriver", "demo")
     const [ api, setApi ] = React.useState(defaultContext.api)
     const [ lastUpdate, setLastUpdate ] = React.useState(defaultContext.lastUpdate)
 
@@ -39,7 +41,9 @@ function APIContextProvider(props) {
             value={{
                 api,
                 lastUpdate,
-                update
+                update,
+                setStorageDriver,
+                storageDriver
             }}
         >
             {props.children}

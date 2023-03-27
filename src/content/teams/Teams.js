@@ -5,23 +5,24 @@ import React from 'react'
 import { ContentGrid } from '../Content'
 import { LoadingSkeleton, SearchBar } from '../people/People'
 import TeamCard from './TeamCard'
-import api from '../../api'
+import APIContext from '../../context/APIContext'
 
 function Teams(props) {
 
     const [loading, setLoading] = React.useState(true)
     const [teams, setTeams] = React.useState([])
     const [toDisplay, setToDisplay] = React.useState([])
+    const apiContext = React.useContext(APIContext)
 
     React.useEffect(() => {
         async function load() {
-            let t = await api.org.getOrgs()
+            let t = await apiContext.api.org.getOrgs()
             setTeams(t)
             setToDisplay(t)
             setLoading(false)
         }
         load()
-    }, [])
+    }, [apiContext.api.org, apiContext.api.driver, apiContext.lastUpdate])
 
     // search
     // TODO: Reduce code duplication and merge <People> and <Teams> into abstract search

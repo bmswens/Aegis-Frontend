@@ -38,3 +38,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Design Choices
 - Why write a custom `<APIContextProvider>` over using [Dexie's `useLiveQuery()`](https://dexie.org/docs/dexie-react-hooks/useLiveQuery())?
   - It will provide an easier interface to integrate in with a custom backend, once that's built.
+  - It can make the testing process easier as we can mock the api in any given state.
+  - It would might make sense to [convert it to a custom hook](https://legacy.reactjs.org/docs/hooks-custom.html). 

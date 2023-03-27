@@ -5,7 +5,7 @@ import React from 'react'
 import { Autocomplete, TextField } from '@mui/material'
 
 // custom
-import api from '../api'
+import APIContext from '../context/APIContext'
 
 function TeamAutoComplete(props) {
 
@@ -13,6 +13,7 @@ function TeamAutoComplete(props) {
 
     const [loading, setLoading] = React.useState(true)
     const [teams, setTeams] = React.useState([])
+    const { api } = React.useContext(APIContext)
 
     React.useEffect(() => {
         async function load() {
@@ -21,7 +22,7 @@ function TeamAutoComplete(props) {
             setLoading(false)
         }
         load()
-    }, [])
+    }, [api.org, api.driver])
 
     return (
         <Autocomplete

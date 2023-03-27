@@ -14,7 +14,7 @@ import OrganizationChart from "@dabeng/react-orgchart"
 
 // Custom
 import { ContentGrid } from '../Content'
-import api from '../../api'
+import APIContext from '../../context/APIContext'
 import PersonCard from '../people/PersonCard'
 import './chart.css'
 
@@ -85,6 +85,7 @@ function OrgSelection(props) {
     const [selected, setSelected] = React.useState(null)
     const [loading, setLoading] = React.useState(true)
     const [orgs, setOrgs] = React.useState([])
+    const { api } = React.useContext(APIContext)
 
     React.useEffect(() => {
         async function load() {
@@ -93,7 +94,7 @@ function OrgSelection(props) {
             setLoading(false)
         }
         load()
-    }, [])
+    }, [api.org, api.driver])
 
     React.useEffect(() => {
         setLoading(true)
@@ -112,7 +113,7 @@ function OrgSelection(props) {
         else if (loading && !selected) {
             setLoading(false)
         }
-    }, [loading, selected, setData])
+    }, [loading, selected, setData, api.org, api.driver])
 
     return (
         <Grid item xs={12}>

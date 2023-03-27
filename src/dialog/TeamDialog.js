@@ -3,7 +3,7 @@ import React from 'react'
 
 //MUI
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from '@mui/material'
-import api from '../api'
+import APIContext from '../context/APIContext'
 
 const emptyTeam = {
     id: null,
@@ -21,7 +21,8 @@ function TeamDialog(props) {
         startData = team
     }
     const [data, setData] = React.useState(startData)
-
+    const { api } = React.useContext(APIContext)
+    
     function handleClose() {
         if (!team?.id) {
             setData(emptyTeam)
