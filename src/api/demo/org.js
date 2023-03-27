@@ -86,10 +86,12 @@ async function getDetailedOrg(uuid) {
     return org
 }
 
+/* istanbul ignore next: wrapper demo function */
 async function addTeam(team) {
     return faker.datatype.uuid()
 }
 
+/* istanbul ignore next: does nothing */
 async function editTeam(team) {
     return true
 }
