@@ -5,10 +5,12 @@ import React from 'react'
 import ThemeContext from './ThemeContext'
 import { APIContextProvider } from './APIContext'
 import { UserContextProvider } from './UserContext'
+import KeyCloakContext from './KeyCloakContext'
 
 function Context(props) {
 
     return (
+        <KeyCloakContext>
         <ThemeContext>
         <UserContextProvider>
             <APIContextProvider>
@@ -16,6 +18,7 @@ function Context(props) {
             </APIContextProvider>
         </UserContextProvider>
         </ThemeContext>
+        </KeyCloakContext>
     )
 
 }

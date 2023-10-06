@@ -6,8 +6,8 @@ import { AppBar, Box, IconButton, Toolbar, Tooltip } from '@mui/material'
 
 // MUI Icons
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import UserDialog from '../dialog/UserDialog'
 import { Link } from 'react-router-dom'
+import AccountDialog from '../dialog/AccountDialog'
 
 function TopNav(props) {
 
@@ -53,7 +53,7 @@ function TopNav(props) {
                     </Tooltip>
                 </Toolbar>
             </AppBar>
-            <UserDialog
+            <AccountDialog
                 open={profileOpen}
                 close={close}
             />
