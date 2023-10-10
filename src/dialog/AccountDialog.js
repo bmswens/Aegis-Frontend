@@ -2,20 +2,20 @@
 import React from 'react'
 
 // keycloak
-import { useKeycloak } from '@react-keycloak/web'
+import { useAuth } from 'react-oidc-context'
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from '@mui/material'
 import api from '../api/custom'
 
 
 function AccountButton(props) {
 
-    const { keycloak } = useKeycloak()
+    const auth = useAuth()
 
-    if (keycloak.authenticated) {
+    if (auth.isAuthenticated) {
         return (
             <Button
                 variant="contained"
-                onClick={keycloak.logout}
+                onClick={auth.signoutRedirect}
             >
                 Logout
             </Button>
@@ -25,7 +25,7 @@ function AccountButton(props) {
         return (
             <Button
                 variant="contained"
-                onClick={keycloak.login}
+                onClick={auth.signinRedirect}
             >
                 Login
             </Button>
@@ -35,20 +35,20 @@ function AccountButton(props) {
 
 function AccountInfo(props) {
 
-    const { keycloak } = useKeycloak()
+    const auth = useAuth()
     const [accountInfo, setAccountInfo] = React.useState({})
 
     React.useEffect(() => {
         async function load() {
-            let userInfo = await api.getSelf(keycloak.token)
+            let userInfo = await api.getSelf(auth.user.access_token)
             setAccountInfo(userInfo)
         }
-        if (keycloak.authenticated) {
+        if (auth.isAuthenticated) {
             load()
         }
-    }, [keycloak])
+    }, [auth])
 
-    if (!keycloak.authenticated) {
+    if (!accountInfo.email) {
         return null
     }
 
@@ -86,11 +86,6 @@ function AccountInfo(props) {
 function AccountDialog(props) {
     // for use with keycloak and api
     const { open, close } = props
-
-    const { keycloak } = useKeycloak()
-
-    console.log(keycloak.tokenParsed)
-    console.log(keycloak.token)
 
     return (
         <Dialog
