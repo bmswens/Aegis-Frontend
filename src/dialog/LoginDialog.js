@@ -33,7 +33,7 @@ function LoginDialog(props) {
                         variant="contained"
                         onClick={auth.signinRedirect}
                     >
-                        Log In
+                        Sign In / Sign Up
                     </Button>
                     <Button
                         variant="contained"
