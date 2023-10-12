@@ -7,34 +7,27 @@ import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, 
 import api from '../api'
 
 
-function AccountButton(props) {
-
+function LogoutButton(props) {
     const auth = useAuth()
-
-    if (auth.isAuthenticated) {
-        return (
-            <Button
-                variant="contained"
-                onClick={auth.signoutRedirect}
-            >
-                Logout
-            </Button>
-        )
+    const { close } = props
+    function handleClick() {
+        close()
+        auth.signoutSilent()
     }
-    else {
-        return (
-            <Button
-                variant="contained"
-                onClick={auth.signinRedirect}
-            >
-                Login
-            </Button>
-        )
-    }
+    return (
+        <Button
+            onClick={handleClick}
+        >
+            Logout
+        </Button>
+    )
 }
 
-function AccountInfo(props) {
+function AccountDialog(props) {
 
+    const { open, close } = props
+
+    // content load and update
     const auth = useAuth()
     const [accountInfo, setAccountInfo] = React.useState({})
 
@@ -48,44 +41,18 @@ function AccountInfo(props) {
         }
     }, [auth])
 
+    async function update() {
+        let body = {...accountInfo}
+        delete body.lastUpdated
+        delete body.email
+        console.log(body)
+        await api.updateSelf(body, auth.user.access_token)
+        close()
+    }
+
     if (!accountInfo.email) {
         return null
     }
-
-    return (
-        <>
-            <TextField
-                label="First Name"
-                value={accountInfo.firstName}
-            />
-            <TextField
-                label="Last Name"
-                value={accountInfo.lastName}
-            />
-            <TextField
-                label="Email"
-                disabled
-                value={accountInfo.email}
-            />
-            <TextField
-                label="Title"
-                value={accountInfo.title}
-            />
-            <TextField
-                label="Address"
-                value={accountInfo.address}
-            />
-            <TextField
-                label="Phone"
-                value={accountInfo.phone}
-            />
-        </>
-    )
-}
-
-function AccountDialog(props) {
-    // for use with keycloak and api
-    const { open, close } = props
 
     return (
         <Dialog
@@ -102,18 +69,53 @@ function AccountDialog(props) {
             </DialogTitle>
             <DialogContent>
                 <Stack spacing={1} sx={{ marginTop: 1 }}>
-                    <AccountInfo />
+                    <TextField
+                        label="First Name"
+                        value={accountInfo.firstName}
+                        onChange={event => setAccountInfo({ ...accountInfo, firstName: event.target.value })}
+                    />
+                    <TextField
+                        label="Last Name"
+                        value={accountInfo.lastName}
+                        onChange={event => setAccountInfo({ ...accountInfo, lastName: event.target.value })}
+                    />
+                    <TextField
+                        label="Email"
+                        disabled
+                        value={accountInfo.email}
+                    />
+                    <TextField
+                        label="Title"
+                        value={accountInfo.title}
+                        onChange={event => setAccountInfo({ ...accountInfo, title: event.target.value })}
+                    />
+                    <TextField
+                        label="Address"
+                        value={accountInfo.address}
+                        onChange={event => setAccountInfo({ ...accountInfo, address: event.target.value })}
+                    />
+                    <TextField
+                        label="Phone"
+                        value={accountInfo.phone}
+                        onChange={event => setAccountInfo({ ...accountInfo, phone: event.target.value })}
+                    />
+                    <TextField
+                        label="Last Updated"
+                        disabled
+                        value={accountInfo.lastUpdated}
+                    />
                 </Stack>
             </DialogContent>
             <DialogActions>
+                <LogoutButton
+                    close={close}
+                />
                 <Button
                     variant="contained"
-                    onClick={close}
+                    onClick={update}
                 >
-                    Close
+                    Update
                 </Button>
-                <Box sx={{ flexGrow: 1 }} />
-                <AccountButton />
             </DialogActions>
         </Dialog>
     )
