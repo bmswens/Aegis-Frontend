@@ -4,7 +4,7 @@ import React from 'react'
 // keycloak
 import { useAuth } from 'react-oidc-context'
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from '@mui/material'
-import api from '../api/custom'
+import api from '../api'
 
 
 function AccountButton(props) {

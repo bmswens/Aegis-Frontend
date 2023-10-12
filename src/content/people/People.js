@@ -8,7 +8,7 @@ import { Button, Card, CardContent, Grid, Skeleton, TextField } from '@mui/mater
 import { ContentGrid } from '../Content'
 import PersonCard from './PersonCard'
 import { Stack } from '@mui/system'
-import APIContext from '../../context/APIContext'
+import api from '../../api'
 
 function SearchBar(props) {
     const { search, setSearch } = props
@@ -70,17 +70,16 @@ function People(props)  {
     const [searching, setSearching] = React.useState(false)
     const [people, setPeople] = React.useState([])
     const [toDisplay, setToDisplay] = React.useState([])
-    const apiContext = React.useContext(APIContext)
 
     React.useEffect(() => {
         setPeople([])
         setToDisplay([])
         setLoading(true)
-    }, [apiContext.api, apiContext.lastUpdate])
+    }, [])
 
     React.useEffect(() => {
         async function load() {
-            let p = await apiContext.api.people.getPeople()
+            let p = await api.people.getPeople()
             setPeople(p)
             setToDisplay(p)
             setLoading(false)
@@ -89,7 +88,7 @@ function People(props)  {
             load()
             setLoading(false)
         }
-    }, [loading, apiContext.api])
+    }, [loading])
 
     // search
     // TODO: May slow down if there are too many people.

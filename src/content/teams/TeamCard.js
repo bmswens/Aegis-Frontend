@@ -19,20 +19,18 @@ import TeamQuickInfoDialog from './TeamQuickInfoDialog'
 import UserContext from '../../context/UserContext'
 import TeamDialog from '../../dialog/TeamDialog'
 import ConfirmDialog from '../../dialog/ConfirmDialog'
-import APIContext from '../../context/APIContext'
+import api from '../../api'
 
 function AdminActions(props) {
 
     const { team } = props
     const user = React.useContext(UserContext)
-    const apiContext = React.useContext(APIContext)
 
     const [editOpen, setEditOpen] = React.useState(false)
     const [deleteOpen, setDeleteOpen] = React.useState(false)
 
     async function deleteTeam() {
-        await apiContext.api.org.deleteTeam(team.id)
-        apiContext.update()
+        await api.org.deleteTeam(team.id)
     }
 
     if (!user.admin) {

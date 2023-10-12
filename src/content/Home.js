@@ -6,22 +6,18 @@ import { Grid, IconButton, Stack, Tooltip, Typography } from '@mui/material'
 
 // MUI Icons
 import GroupsIcon from '@mui/icons-material/Groups'
-import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import GroupAddIcon from '@mui/icons-material/GroupAdd'
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt'
 import LanIcon from '@mui/icons-material/Lan'
 import PermPhoneMsgIcon from '@mui/icons-material/PermPhoneMsg'
 import InfoIcon from '@mui/icons-material/Info'
 import GitHubIcon from '@mui/icons-material/GitHub'
-import SettingsIcon from '@mui/icons-material/Settings'
 
 // React Router
 import { Link } from 'react-router-dom'
 
 // custom
 import { ContentGrid } from './Content'
-import UserDialog from '../dialog/UserDialog';
-import PersonDialog from '../dialog/PersonDialog'
 import TeamDialog from '../dialog/TeamDialog'
 
 
@@ -87,13 +83,9 @@ function AppButton(props) {
 
 function Home(props) {
 
-    const [addPersonOpen, setAddPersonOpen] = React.useState(false)
-    const [settingsOpen, setSettingsOpen] = React.useState(false)
     const [teamOpen, setTeamOpen] = React.useState(false)
     function close() {
         setTeamOpen(false)
-        setAddPersonOpen(false)
-        setSettingsOpen(false)
     }
 
     return (
@@ -107,11 +99,6 @@ function Home(props) {
                 title="Org Chart"
                 icon={<LanIcon sx={{ fontSize: "20vmin" }} />}
                 link="/org-chart"
-            />
-            <AppButton
-                title="Add Person"
-                icon={<PersonAddIcon sx={{ fontSize: "20vmin" }} />}
-                onClick={() => setAddPersonOpen(true)}
             />
             <AppButton
                 title="Teams"
@@ -141,20 +128,7 @@ function Home(props) {
                 link="https://github.com/bmswens/Aegis-Frontend"
                 external
             />
-            <AppButton
-                title="Settings"
-                icon={<SettingsIcon sx={{ fontSize: "20vmin" }} />}
-                onClick={() => setSettingsOpen(true)}
-            />
             {/* Dialogs */}
-            <UserDialog
-                open={settingsOpen}
-                close={close}
-            />
-            <PersonDialog
-                open={addPersonOpen}
-                close={close}
-            />
             <TeamDialog
                 open={teamOpen}
                 close={close}
