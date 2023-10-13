@@ -5,7 +5,8 @@ async function getSelf(token) {
             authorization: `Bearer ${token}`
         }
     })
-    return await resp.json()
+    let body = await resp.json()
+    return body
 }
 
 async function updateSelf(body, token) {

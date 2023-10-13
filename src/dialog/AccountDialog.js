@@ -3,8 +3,19 @@ import React from 'react'
 
 // keycloak
 import { useAuth } from 'react-oidc-context'
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from '@mui/material'
 import api from '../api'
+
+
+const defaultAccountInfo = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    title: "",
+    address: "",
+    lastUpdated: ""
+}
 
 
 function LogoutButton(props) {
@@ -29,7 +40,7 @@ function AccountDialog(props) {
 
     // content load and update
     const auth = useAuth()
-    const [accountInfo, setAccountInfo] = React.useState({})
+    const [accountInfo, setAccountInfo] = React.useState(defaultAccountInfo)
 
     React.useEffect(() => {
         async function load() {
@@ -45,7 +56,6 @@ function AccountDialog(props) {
         let body = {...accountInfo}
         delete body.lastUpdated
         delete body.email
-        console.log(body)
         await api.updateSelf(body, auth.user.access_token)
         close()
     }
