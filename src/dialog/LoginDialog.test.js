@@ -37,7 +37,7 @@ describe('<LoginDialog>', function() {
                 close={close}
             />
         )
-        let button = screen.getByRole("button", { name: "Log In" })
+        let button = screen.getByRole("button", { name: "Sign In / Sign Up" })
         await act(() => user.click(button))
         expect(authObject.signinRedirect).toHaveBeenCalled()
     })
