@@ -54,12 +54,44 @@ async function getOrgChart(uuid, token="") {
     return body
 }
 
+async function createTeam(data, token="") {
+    let resp = await fetch(
+        `/api/teams/create`,
+        {
+            method: "POST",
+            headers: {
+                authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(data)
+        }
+    )
+    let body = await resp.json()
+    return body
+}
+
+async function editTeam(data, token="") {
+    let resp = await fetch(
+        `/api/teams/${data.id}`,
+        {
+            method: "PUT",
+            headers: {
+                authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(data)
+        }
+    )
+    let body = await resp.json()
+    return body
+}
+
 const teams = {
     getTeamsSimple,
     getTeamDetailed,
     deleteTeam,
     getOrgChart,
-    getTeams
+    getTeams,
+    createTeam,
+    editTeam
 }
 
 export default teams

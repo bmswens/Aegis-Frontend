@@ -31,10 +31,10 @@ function TeamDialog(props) {
 
     async function submit() {
         if (team?.id) {
-            await api.org.editTeam(data)
+            await api.teams.editTeam(data)
         }
         else {
-            await api.org.addTeam(data)
+            await api.teams.createTeam(data)
         }
         handleClose()
     }
