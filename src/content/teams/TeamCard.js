@@ -30,7 +30,7 @@ function AdminActions(props) {
     const [deleteOpen, setDeleteOpen] = React.useState(false)
 
     async function deleteTeam() {
-        await api.org.deleteTeam(team.id)
+        await api.teams.deleteTeam(team.id)
     }
 
     if (!user.admin) {

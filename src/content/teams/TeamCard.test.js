@@ -125,7 +125,7 @@ describe("<TeamCard> as admin", function() {
     })
     it("should allow the admin to delete the team", async function() {
         let user = userEvent.setup()
-        let spy = jest.spyOn(api.org, "deleteTeam")
+        fetch = jest.fn().mockResolvedValue({ok: true})
         render(
             <UserContextProvider>
                 <BrowserRouter>
@@ -139,7 +139,12 @@ describe("<TeamCard> as admin", function() {
         await act(() => user.click(deleteButton))
         let confirmButton = screen.getByRole("button", {name: "Confirm"})
         await act(() => user.click(confirmButton))
-        expect(spy).toHaveBeenCalledWith(1)
+        expect(fetch).toHaveBeenCalledWith("/api/teams/1", {
+            method: "DELETE",
+            headers: {
+                authorization: "Bearer "
+            }
+        })
     })
 })
 

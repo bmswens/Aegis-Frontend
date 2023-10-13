@@ -20,9 +20,23 @@ async function getTeamDetailed(uuid, token="") {
     return body
 }
 
+async function deleteTeam(uuid, token="") {
+    let resp = await fetch(
+        `/api/teams/${uuid}`,
+        {
+            method: "DELETE",
+            headers: {
+                authorization: `Bearer ${token}`
+            }
+        }
+    )
+    return resp.ok
+}
+
 const teams = {
     getTeamsSimple,
-    getTeamDetailed
+    getTeamDetailed,
+    deleteTeam
 }
 
 export default teams
