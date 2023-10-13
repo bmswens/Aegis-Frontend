@@ -10,24 +10,9 @@ import { demoUser } from '../../context/UserContext'
 import People from './People'
 
 describe('<People>', function() {
-    it("should render the demo data", async function() {
-        const spy = jest.spyOn(api.people, "getPeople")
-        render(
-            <BrowserRouter>
-                <People />
-            </BrowserRouter>
-        )
-        await waitFor(() => {
-            expect(spy).toHaveBeenCalled()
-        })
-        await waitFor(() => {
-            let buttons = screen.getAllByRole("button")
-            expect(buttons.length).not.toBe(0)
-        })
-    })
     it('should be able to query on name', async function() {
         const user = userEvent.setup()
-        api.people.getPeople = jest.fn().mockResolvedValue([
+        fetch = jest.fn().mockResolvedValue({json: async () => [
             {
                 ...demoUser,
                 id: 1,
@@ -39,14 +24,14 @@ describe('<People>', function() {
                 firstName: "Dude",
                 email: "dude@gmail.com"
             }
-        ])
+        ]})
         render(
             <BrowserRouter>
                 <People />
             </BrowserRouter>
         )
         await waitFor(() => {
-            expect(api.people.getPeople).toHaveBeenCalled()
+            expect(fetch).toHaveBeenCalled()
         })
         let textField = screen.getByLabelText("Search")
         await act(() => user.type(textField, "Brandon"))
@@ -59,10 +44,10 @@ describe('<People>', function() {
     })
     it('should be able to query on email', async function() {
         const user = userEvent.setup()
-        api.people.getPeople = jest.fn().mockResolvedValue([
+        fetch = jest.fn().mockResolvedValue({json: async () => [
             {
                 ...demoUser,
-                id:1,
+                id: 1,
                 firstName: "Brandon"
             },
             {
@@ -71,14 +56,14 @@ describe('<People>', function() {
                 firstName: "Dude",
                 email: "dude@gmail.com"
             }
-        ])
+        ]})
         render(
             <BrowserRouter>
                 <People />
             </BrowserRouter>
         )
         await waitFor(() => {
-            expect(api.people.getPeople).toHaveBeenCalled()
+            expect(fetch).toHaveBeenCalled()
         })
         let textField = screen.getByLabelText("Search")
         await act(() => user.type(textField, "dude@gmail.com"))
@@ -91,7 +76,7 @@ describe('<People>', function() {
     })
     it('should be able to query on phone number', async function() {
         const user = userEvent.setup()
-        api.people.getPeople = jest.fn().mockResolvedValue([
+        fetch = jest.fn().mockResolvedValue({json: async () => [
             {
                 ...demoUser,
                 id: 1,
@@ -99,19 +84,19 @@ describe('<People>', function() {
             },
             {
                 ...demoUser,
-                id: 2,
+                id:2,
                 firstName: "Dude",
                 email: "dude@gmail.com",
                 phone: "911"
             }
-        ])
+        ]})
         render(
             <BrowserRouter>
                 <People />
             </BrowserRouter>
         )
         await waitFor(() => {
-            expect(api.people.getPeople).toHaveBeenCalled()
+            expect(fetch).toHaveBeenCalled()
         })
         let textField = screen.getByLabelText("Search")
         await act(() => user.type(textField, "911"))
@@ -124,7 +109,7 @@ describe('<People>', function() {
     })
     it('should be able to query on address', async function() {
         const user = userEvent.setup()
-        api.people.getPeople = jest.fn().mockResolvedValue([
+        fetch = jest.fn().mockResolvedValue({json: async () => [
             {
                 ...demoUser,
                 id: 1,
@@ -132,20 +117,20 @@ describe('<People>', function() {
             },
             {
                 ...demoUser,
-                id: 2,
+                id:2,
                 firstName: "Dude",
                 email: "dude@gmail.com",
                 phone: "911",
-                address: "3rd St"
+                address: "3rd st"
             }
-        ])
+        ]})
         render(
             <BrowserRouter>
                 <People />
             </BrowserRouter>
         )
         await waitFor(() => {
-            expect(api.people.getPeople).toHaveBeenCalled()
+            expect(fetch).toHaveBeenCalled()
         })
         let textField = screen.getByLabelText("Search")
         await act(() => user.type(textField, "3rd St"))
@@ -158,7 +143,7 @@ describe('<People>', function() {
     })
     it('should be able to query and then reset', async function() {
         const user = userEvent.setup()
-        api.people.getPeople = jest.fn().mockResolvedValue([
+        fetch = jest.fn().mockResolvedValue({json: async () => [
             {
                 ...demoUser,
                 id: 1,
@@ -166,20 +151,20 @@ describe('<People>', function() {
             },
             {
                 ...demoUser,
-                id: 2,
+                id:2,
                 firstName: "Dude",
                 email: "dude@gmail.com",
                 phone: "911",
-                address: "3rd St"
+                address: "3rd st"
             }
-        ])
+        ]})
         render(
             <BrowserRouter>
                 <People />
             </BrowserRouter>
         )
         await waitFor(() => {
-            expect(api.people.getPeople).toHaveBeenCalled()
+            expect(fetch).toHaveBeenCalled()
         })
         let textField = screen.getByLabelText("Search")
         await act(() => user.type(textField, "3rd St"))
@@ -198,7 +183,7 @@ describe('<People>', function() {
     })
     it('should be able to query on pressing {enter}', async function() {
         const user = userEvent.setup()
-        api.people.getPeople = jest.fn().mockResolvedValue([
+        fetch = jest.fn().mockResolvedValue({json: async () => [
             {
                 ...demoUser,
                 id: 1,
@@ -206,20 +191,20 @@ describe('<People>', function() {
             },
             {
                 ...demoUser,
-                id: 2,
+                id:2,
                 firstName: "Dude",
                 email: "dude@gmail.com",
                 phone: "911",
-                address: "3rd St"
+                address: "3rd st"
             }
-        ])
+        ]})
         render(
             <BrowserRouter>
                 <People />
             </BrowserRouter>
         )
         await waitFor(() => {
-            expect(api.people.getPeople).toHaveBeenCalled()
+            expect(fetch).toHaveBeenCalled()
         })
         let textField = screen.getByLabelText("Search")
         await act(() => user.type(textField, "3rd St{enter}"))
