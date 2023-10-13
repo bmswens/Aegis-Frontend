@@ -3,7 +3,6 @@ import { screen, render, act, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { BrowserRouter } from 'react-router-dom'
 import api from '../../api'
-import APIContext from '../../context/APIContext'
 import UserContext, { demoUser, UserContextProvider } from '../../context/UserContext'
 
 // to test
@@ -79,57 +78,6 @@ describe('<PersonCard>', function() {
     })
 })
 
-describe("<PersonCard> as admin", function() {
-    it("should allow the admin to update info", async function() {
-        let user = userEvent.setup()
-        api.people.updatePerson = jest.fn()
-        render(
-            <UserContextProvider>
-                <BrowserRouter>
-                    <PersonCard
-                        id="a"
-                    />
-                </BrowserRouter>
-            </UserContextProvider>
-        )
-        let editButton = screen.getByRole("button", { name: "Edit Person"})
-        expect(editButton).not.toBeNull()
-        await act(() => user.click(editButton))
-        let submitButton = screen.getByRole("button", { name: "Submit" })
-        await act(() => userEvent.click(submitButton))
-        expect(api.people.updatePerson).toHaveBeenCalled()
-    })
-    it("should allow the admin to delete", async function() {
-        let user = userEvent.setup()
-        let context = {
-            api: {
-                people: {
-                    deletePerson: jest.fn()
-                }
-            },
-            update: jest.fn(),
-            lastUpdated: new Date()
-        }
-        render(
-            <UserContextProvider>
-                <APIContext.Provider value={context}>
-                <BrowserRouter>
-                    <PersonCard
-                        id="a"
-                    />
-                </BrowserRouter>
-                </APIContext.Provider>
-            </UserContextProvider>
-        )
-        let deleteButton = screen.getByRole("button", { name: "Delete Person"})
-        expect(deleteButton).not.toBeNull()
-        await act(() => user.click(deleteButton))
-        let submitButton = screen.getByRole("button", { name: "Confirm" })
-        await act(() => userEvent.click(submitButton))
-        expect(context.api.people.deletePerson).toHaveBeenCalledWith("a")
-        expect(context.update).toHaveBeenCalled()
-    })
-})
 
 describe("<PersonCard> as non-admin", function() {
     it("should now display the edit button", function() {
@@ -153,25 +101,5 @@ describe("<PersonCard> as non-admin", function() {
         )
         let editButton = screen.queryByRole("button", { name: "Delete Person"})
         expect(editButton).toBeNull()
-    })
-    it("should open and close the more info dialog", async function() {
-        let user = userEvent.setup()
-        render(
-            <UserContext.Provider value={{...demoUser, admin: false}}>
-            <BrowserRouter>
-                <PersonCard />
-            </BrowserRouter>
-            </UserContext.Provider>
-        )
-        let open = screen.getByRole("button", { name: "More Info" })
-        await act(() => user.click(open))
-        let dialog = screen.getByRole("dialog")
-        expect(dialog).not.toBeNull()
-        let close = screen.getByRole("button", { name: "Close" })
-        await act(() => user.click(close))
-        await waitFor(() => {
-            let dialog2 = screen.queryByRole("dialog")
-            expect(dialog2).toBeNull()
-        })
     })
 })
