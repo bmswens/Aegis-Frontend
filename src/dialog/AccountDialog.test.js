@@ -107,7 +107,7 @@ describe('<AccountDialog>', function() {
         await act(() => user.click(button))
         expect(fetch).toHaveBeenCalledTimes(2)
     })
-    it("should load if not authenticated", function() {
+    it("shouldn't load if not authenticated", function() {
         let authObject = {
             isAuthenticated: false,
             signoutSilent: jest.fn(),
