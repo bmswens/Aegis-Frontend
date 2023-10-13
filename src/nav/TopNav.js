@@ -33,6 +33,11 @@ function AccountButton(props) {
         }
     }
 
+    function close() {
+        setAccountOpen(false)
+        setLoginOpen(false)
+    }
+
     return (
         <>
             <Tooltip
@@ -47,11 +52,11 @@ function AccountButton(props) {
             </Tooltip>
             <AccountDialog
                 open={accountOpen}
-                close={() => setAccountOpen(false)}
+                close={close}
             />
             <LoginDialog
                 open={loginOpen}
-                close={() => setLoginOpen(false)}
+                close={close}
             />
         </>
     )
