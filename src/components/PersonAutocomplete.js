@@ -5,18 +5,17 @@ import React from 'react'
 import { Autocomplete, TextField } from '@mui/material'
 
 // custom
-import APIContext from '../context/APIContext'
+import api from '../api'
 
 function PersonAutocomplete(props) {
     const {value, setValue, disabled} = props
 
     const [loading, setLoading] = React.useState(true)
     const [people, setPeople] = React.useState([])
-    const { api } = React.useContext(APIContext)
 
     React.useEffect(() => {
         async function load() {
-            let p = await api.people.getShortPeople()
+            let p = await api.people.getPeopleSimple()
             setPeople(p)
             setLoading(false)
         }

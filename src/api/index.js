@@ -1,3 +1,5 @@
+import people from "./people"
+import org from './org'
 
 async function getSelf(token) {
     let resp = await fetch("/api/self", {
@@ -23,7 +25,9 @@ async function updateSelf(body, token) {
 
 const api = {
     getSelf,
-    updateSelf
+    updateSelf,
+    people,
+    org
 }
 
 export default api
