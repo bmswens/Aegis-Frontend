@@ -88,7 +88,7 @@ function OrgSelection(props) {
 
     React.useEffect(() => {
         async function load() {
-            let o = await api.org.getShortOrgs()
+            let o = await api.teams.getTeamsSimple()
             setOrgs(o)
             setLoading(false)
         }
@@ -102,7 +102,7 @@ function OrgSelection(props) {
 
     React.useEffect(() => {
         async function load() {
-            let chartData = await api.org.getOrgChart(selected.id)
+            let chartData = await api.teams.getOrgChart(selected.id)
             setData(chartData)
             setLoading(false)
         }

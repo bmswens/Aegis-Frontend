@@ -33,10 +33,24 @@ async function deleteTeam(uuid, token="") {
     return resp.ok
 }
 
+async function getOrgChart(uuid, token="") {
+    let resp = await fetch(
+        `/api/teams/${uuid}/chart`,
+        {
+            headers: {
+                authorization: `Bearer ${token}`
+            }
+        }
+    )
+    let body = await resp.json()
+    return body
+}
+
 const teams = {
     getTeamsSimple,
     getTeamDetailed,
-    deleteTeam
+    deleteTeam,
+    getOrgChart
 }
 
 export default teams
