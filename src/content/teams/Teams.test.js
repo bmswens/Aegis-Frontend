@@ -33,16 +33,20 @@ const mockOrgs = [
     }
 ]
 
+const mockResponse = {
+    json: async () => mockOrgs
+}
+
 describe('<Teams>', function () {
     it("should use the API to load the teams", async function () {
-        let spy = jest.spyOn(api.org, "getOrgs")
+        fetch = jest.fn().mockResolvedValue(mockResponse)
         render(
             <BrowserRouter>
                 <Teams />
             </BrowserRouter>
         )
         await waitFor(() => {
-            expect(spy).toHaveBeenCalled()
+            expect(fetch).toHaveBeenCalled()
         })
         await waitFor(() => {
             let buttons = screen.getAllByRole("button", { name: "Send Email" })
@@ -51,7 +55,7 @@ describe('<Teams>', function () {
     })
     it("should be able to query on name", async function () {
         const user = userEvent.setup()
-        api.org.getOrgs = jest.fn().mockResolvedValue(mockOrgs)
+        fetch = jest.fn().mockResolvedValue(mockResponse)
         render(
             <BrowserRouter>
                 <Teams />
@@ -65,7 +69,7 @@ describe('<Teams>', function () {
     })
     it("should be able to query on email", async function () {
         const user = userEvent.setup()
-        api.org.getOrgs = jest.fn().mockResolvedValue(mockOrgs)
+        fetch = jest.fn().mockResolvedValue(mockResponse)
         render(
             <BrowserRouter>
                 <Teams />
@@ -79,7 +83,7 @@ describe('<Teams>', function () {
     })
     it("should be able to query on address", async function () {
         const user = userEvent.setup()
-        api.org.getOrgs = jest.fn().mockResolvedValue(mockOrgs)
+        fetch = jest.fn().mockResolvedValue(mockResponse)
         render(
             <BrowserRouter>
                 <Teams />
@@ -93,7 +97,7 @@ describe('<Teams>', function () {
     })
     it("should be able to query on phone", async function () {
         const user = userEvent.setup()
-        api.org.getOrgs = jest.fn().mockResolvedValue(mockOrgs)
+        fetch = jest.fn().mockResolvedValue(mockResponse)
         render(
             <BrowserRouter>
                 <Teams />

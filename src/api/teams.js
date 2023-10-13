@@ -1,7 +1,15 @@
+async function getTeams() {
+    let resp = await fetch(
+        "/api/teams",
+    )
+    let body = await resp.json()
+    return body
+}
+
 
 async function getTeamsSimple() {
     let resp = await fetch(
-        "/api/orgs/simple",
+        "/api/teams/simple",
     )
     let body = await resp.json()
     return body
@@ -50,7 +58,8 @@ const teams = {
     getTeamsSimple,
     getTeamDetailed,
     deleteTeam,
-    getOrgChart
+    getOrgChart,
+    getTeams
 }
 
 export default teams

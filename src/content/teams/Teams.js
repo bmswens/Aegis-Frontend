@@ -15,7 +15,7 @@ function Teams(props) {
 
     React.useEffect(() => {
         async function load() {
-            let t = await api.org.getOrgs()
+            let t = await api.teams.getTeams()
             setTeams(t)
             setToDisplay(t)
             setLoading(false)
