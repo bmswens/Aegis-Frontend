@@ -96,7 +96,7 @@ function DetailedTeamPage(props) {
 
     React.useEffect(() => {
         async function load() {
-            let t = await api.org.getDetailedOrg(uuid)
+            let t = await api.teams.getTeamDetailed(uuid)
             setTeam(t)
             setLoading(false)
         }

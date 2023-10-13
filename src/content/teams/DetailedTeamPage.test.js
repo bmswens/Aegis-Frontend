@@ -23,6 +23,19 @@ describe("<DetailedTeamPage> small screen", function () {
         window.matchMedia = createMatchMedia(600)
     })
     it("should hide a lot of columns on small screens", async function () {
+        fetch = jest.fn().mockResolvedValue({
+            json: async () => {
+                return {
+                    name: "Dev Team",
+                    memberCount: 0,
+                    address: "x",
+                    email: "xxx",
+                    phone: "xx",
+                    admins: [],
+                    people: []
+                }
+            }
+        })
         render(
             <MemoryRouter
                 initialEntries={["/teams/uuid"]}
@@ -49,7 +62,19 @@ describe('<DetailedTeamPage>', function () {
         window.matchMedia = createMatchMedia(1200)
     })
     it("should use the api to load details", async function () {
-        let spy = jest.spyOn(api.org, "getDetailedOrg")
+        fetch = jest.fn().mockResolvedValue({
+            json: async () => {
+                return {
+                    name: "Dev Team",
+                    memberCount: 0,
+                    address: "x",
+                    email: "xxx",
+                    phone: "xx",
+                    admins: [],
+                    people: []
+                }
+            }
+        })
         render(
             <MemoryRouter
                 initialEntries={["/teams/uuid"]}
@@ -66,6 +91,6 @@ describe('<DetailedTeamPage>', function () {
             let emailButton = screen.getByRole("button", { name: "Send Email" })
             expect(emailButton).not.toBeNull()
         })
-        expect(spy).toHaveBeenCalledWith("uuid")
+        expect(fetch).toHaveBeenCalledWith("/api/teams/uuid/detailed", {headers: {authorization: "Bearer "}})
     })
 })

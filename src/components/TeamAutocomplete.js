@@ -16,7 +16,7 @@ function TeamAutoComplete(props) {
 
     React.useEffect(() => {
         async function load() {
-            let t = await api.org.getOrgsSimple()
+            let t = await api.teams.getTeamsSimple()
             setTeams(t)
             setLoading(false)
         }
