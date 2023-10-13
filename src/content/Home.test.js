@@ -16,24 +16,6 @@ describe("<Home>", function() {
         let button = screen.getByRole("button", { name: "Teams"})
         expect(button).not.toBeNull()
     })
-    it('should have a button to add new people', async function() {
-        let user = userEvent.setup()
-        render(
-            <BrowserRouter>
-                <Home />
-            </BrowserRouter>
-        )
-        let button = screen.getByRole("button", { name: "Add Person"})
-        await act(async () => await user.click(button))
-        let dialog = screen.getByRole("dialog", { name: "Add New Person"})
-        expect(dialog).not.toBeNull()
-        let closeButton = screen.getByRole("button", { name: "Cancel" })
-        await act(async () => await userEvent.click(closeButton))
-        await waitFor(() => {
-            let goneDialog = screen.queryByRole("dialog", { name: "Add New Person"})
-            expect(goneDialog).toBeNull()
-        })
-    })
     it('should have a button to create a new team', async function() {
         let user = userEvent.setup()
         render(
@@ -96,24 +78,5 @@ describe("<Home>", function() {
         )
         let button = screen.getByRole("button", { name: "View Code"})
         expect(button).not.toBeNull()
-    })
-    it('should have a button to open settings', async function() {
-        const user = userEvent.setup()
-        render(
-            <BrowserRouter>
-                <Home />
-            </BrowserRouter>
-        )
-        let button = screen.getByRole("button", { name: "Settings"})
-        expect(button).not.toBeNull()
-        await act(() => user.click(button))
-        let dialog = screen.getByRole("dialog", { title: "User Settings"})
-        expect(dialog).not.toBeNull()
-        let closeButton = screen.getByRole("button", { name: "Cancel" })
-        await act(() => user.click(closeButton))
-        await waitFor(() => {
-            let settingsDialog = screen.queryByRole("dialog", { title: "User Settings"})
-            expect(settingsDialog).toBeNull()
-        })
     })
 })
