@@ -8,6 +8,9 @@ import { Grid, useMediaQuery, useTheme } from '@mui/material'
 // react router
 import { useParams } from 'react-router-dom'
 
+// auth
+import { useAuth } from 'react-oidc-context'
+
 // custom 
 import { ContentGrid } from '../Content'
 import TeamCard from './TeamCard'
@@ -94,9 +97,11 @@ function DetailedTeamPage(props) {
     const [loading, setLoading] = React.useState(true)
     const [team, setTeam] = React.useState({})
 
+    const auth = useAuth()
+
     React.useEffect(() => {
         async function load() {
-            let t = await api.teams.getTeamDetailed(uuid)
+            let t = await api.teams.getTeamDetailed(uuid, auth.user.access_token)
             setTeam(t)
             setLoading(false)
         }
@@ -121,7 +126,7 @@ function DetailedTeamPage(props) {
                 {...team}
             />
             <PeopleTable
-                people={team.people}
+                people={team.members}
             />
         </ContentGrid>
     )

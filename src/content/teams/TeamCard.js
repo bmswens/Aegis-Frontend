@@ -12,9 +12,16 @@ import InfoIcon from '@mui/icons-material/Info'
 import LaunchIcon from '@mui/icons-material/Launch'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
+import CheckIcon from '@mui/icons-material/Check'
+import StarIcon from '@mui/icons-material/Star'
 
 // router dom
 import { Link } from 'react-router-dom'
+
+// auth
+import { useAuth } from 'react-oidc-context'
+
+// custom
 import TeamQuickInfoDialog from './TeamQuickInfoDialog'
 import UserContext from '../../context/UserContext'
 import TeamDialog from '../../dialog/TeamDialog'
@@ -100,6 +107,64 @@ function LinkButton(props) {
     )
 }
 
+
+function MemberStatusIcon(props) {
+
+    const theme = useTheme()
+    const auth = useAuth()
+
+    const { id } = props
+
+    // default to a person not being a member, and update on fetch
+    const nonMemberStyle = {
+        title: "Not A Member",
+        color: theme.palette.info.dark,
+        icon: "-"
+    }
+    const [styles, setStyles] = React.useState(nonMemberStyle)
+
+    React.useEffect(() => {
+        async function load() {
+            let resp = await api.teams.getMemberStatus(id, auth.user.access_token)
+            if (resp.status === "member") {
+                setStyles({
+                    title: "Member",
+                    color: theme.palette.success.dark,
+                    icon: <CheckIcon data-testid="Member" fontSize="large" />
+                })
+            }
+            else if (resp.status === "admin") {
+                setStyles({
+                    title: "Admin",
+                    color: theme.palette.warning.dark,
+                    icon: <StarIcon data-testid="Admin" fontSize="large" />
+                })
+            }
+            else {
+                setStyles(nonMemberStyle)
+            }
+        }
+        load()
+    }, [id, auth])
+
+
+
+
+    return (
+        <Tooltip
+            title={styles.title}
+        >
+            <Avatar
+                sx={{
+                    bgcolor: styles.color
+                }}
+            >
+                {styles.icon}
+            </Avatar>
+        </Tooltip>
+    )
+}
+
 function TeamCard(props) {
 
     const theme = useTheme()
@@ -107,7 +172,6 @@ function TeamCard(props) {
     const {
         name,
         id,
-        memberCount,
         address,
         email,
         phone,
@@ -146,18 +210,10 @@ function TeamCard(props) {
                         variant: "h5"
                     }}
                     avatar={
-                    <Tooltip
-                        title="Member Count"
-                    >
-                        <Avatar
-                            sx={{
-                                bgcolor: theme.palette.primary.dark
-                            }}
-                        >
-                            {memberCount}
-                        </Avatar>
-                    </Tooltip>
-                }
+                        <MemberStatusIcon
+                            id={id}
+                        />
+                    }
                 />
                 <CardActions>
                     <Tooltip
@@ -169,7 +225,7 @@ function TeamCard(props) {
                             <InfoIcon fontSize="large" />
                         </IconButton>
                     </Tooltip>
-                    { noLink ? null : 
+                    {noLink ? null :
                         <LinkButton
                             title="Details"
                             to={`/teams/${id}`}
@@ -185,7 +241,7 @@ function TeamCard(props) {
                             email
                         }}
                     />
-                    <Box sx={{flexGrow: 1}} />
+                    <Box sx={{ flexGrow: 1 }} />
                     <LinkButton
                         external
                         title="View Address"

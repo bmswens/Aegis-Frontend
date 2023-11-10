@@ -17,15 +17,25 @@ async function getTeamsSimple() {
 
 async function getTeamDetailed(uuid, token="") {
     let resp = await fetch(
-        `/api/teams/${uuid}/detailed`,
+        `/api/teams/${uuid}`,
         {
             headers: {
                 authorization: `Bearer ${token}`
             }
         }
     )
-    let body = await resp.json()
-    return body
+    let team = await resp.json()
+    resp = await fetch(
+        `/api/teams/${uuid}/members`,
+        {
+            headers: {
+                authorization: `Bearer ${token}`
+            }
+        }
+    )
+    let members = await resp.json()
+    team.members = members
+    return team
 }
 
 async function deleteTeam(uuid, token="") {
@@ -55,12 +65,15 @@ async function getOrgChart(uuid, token="") {
 }
 
 async function createTeam(data, token="") {
+    delete data.id
     let resp = await fetch(
-        `/api/teams/create`,
+        `/api/teams`,
         {
             method: "POST",
             headers: {
-                authorization: `Bearer ${token}`
+                authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+
             },
             body: JSON.stringify(data)
         }
@@ -75,9 +88,26 @@ async function editTeam(data, token="") {
         {
             method: "PUT",
             headers: {
-                authorization: `Bearer ${token}`
+                authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
             },
             body: JSON.stringify(data)
+        }
+    )
+    let body = await resp.json()
+    return body
+}
+
+
+async function getMemberStatus(teamId, token="") {
+    let resp = await fetch(
+        `/api/teams/${teamId}/membership`,
+        {
+            method: "GET",
+            headers: {
+                authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+            }
         }
     )
     let body = await resp.json()
@@ -91,7 +121,8 @@ const teams = {
     getOrgChart,
     getTeams,
     createTeam,
-    editTeam
+    editTeam,
+    getMemberStatus
 }
 
 export default teams

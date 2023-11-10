@@ -4,29 +4,42 @@ import userEvent  from '@testing-library/user-event'
 import { BrowserRouter } from 'react-router-dom'
 import api from '../../api'
 import UserContext, { demoUser, UserContextProvider } from '../../context/UserContext'
+import  * as oidc  from 'react-oidc-context'
 
 // to test
 import TeamCard from './TeamCard'
 
+// jest mock
+jest.mock('react-oidc-context')
+const defaultAccountInfo = {
+    firstName: "",
+    lastName: "",
+    email: "bmswens@gmail.com",
+    phone: "",
+    title: "",
+    address: "",
+    lastUpdated: ""
+}
+
+
 describe('<TeamCard>', function() {
+    beforeEach(() => {
+        let authObject = {
+            isAuthenticated: true,
+            signoutSilent: jest.fn(),
+            user: {
+                access_token: ""
+            }
+        }
+        oidc.useAuth.mockReturnValue(authObject)
+        fetch = jest.fn().mockResolvedValueOnce({json: async () => defaultAccountInfo})
+    })
     it('should display the team name', function() {
         let expected = "Dev Team"
         render(
             <BrowserRouter>
                 <TeamCard
                     name={expected}
-                />
-            </BrowserRouter>
-        )
-        let actual = screen.getByText(expected)
-        expect(actual).not.toBeNull()
-    })
-    it("should display the number of members", function() {
-        let expected = 14
-        render(
-            <BrowserRouter>
-                <TeamCard
-                    memberCount={expected}
                 />
             </BrowserRouter>
         )
@@ -100,9 +113,52 @@ describe('<TeamCard>', function() {
         let button = screen.queryByRole("button", { name: "Details" })
         expect(button).toBeNull()
     })
+    it("should display a checkmark icon for members", async function() {
+        fetch = jest.fn().mockResolvedValue({json: () => { return {status: "member" } }})
+        render(
+            <UserContextProvider>
+                <BrowserRouter>
+                    <TeamCard 
+                        id={1}
+                    />
+                </BrowserRouter>
+            </UserContextProvider>
+        )
+        await waitFor(() => {
+            let icon = screen.getByTestId("Member")
+            expect(icon).not.toBeNull()
+        })
+    })
+    it("should display a star for admin", async function() {
+        fetch = jest.fn().mockResolvedValue({json: () => { return {status: "admin" } }})
+        render(
+            <UserContextProvider>
+                <BrowserRouter>
+                    <TeamCard 
+                        id={1}
+                    />
+                </BrowserRouter>
+            </UserContextProvider>
+        )
+        await waitFor(() => {
+            let icon = screen.getByTestId("Admin")
+            expect(icon).not.toBeNull()
+        })
+    })
 })
 
 describe("<TeamCard> as admin", function() {
+    beforeEach(() => {
+        let authObject = {
+            isAuthenticated: true,
+            signoutSilent: jest.fn(),
+            user: {
+                access_token: ""
+            }
+        }
+        oidc.useAuth.mockReturnValue(authObject)
+        fetch = jest.fn().mockResolvedValueOnce({json: async () => defaultAccountInfo})
+    })
     it("should contain the edit modal", async function() {
         let user = userEvent.setup()
         render(
@@ -125,16 +181,16 @@ describe("<TeamCard> as admin", function() {
     })
     it("should allow the admin to delete the team", async function() {
         let user = userEvent.setup()
-        fetch = jest.fn().mockResolvedValue({ok: true})
         render(
             <UserContextProvider>
                 <BrowserRouter>
                     <TeamCard 
                         id={1}
-                    />
+                        />
                 </BrowserRouter>
             </UserContextProvider>
         )
+        fetch = jest.fn().mockResolvedValue({ok: true})
         let deleteButton = screen.getByRole("button", { name: "Delete Team"})
         await act(() => user.click(deleteButton))
         let confirmButton = screen.getByRole("button", {name: "Confirm"})
@@ -149,6 +205,17 @@ describe("<TeamCard> as admin", function() {
 })
 
 describe("<TeamCard> as non-admin", function() {
+    beforeEach(() => {
+        let authObject = {
+            isAuthenticated: true,
+            signoutSilent: jest.fn(),
+            user: {
+                access_token: ""
+            }
+        }
+        oidc.useAuth.mockReturnValue(authObject)
+        fetch = jest.fn().mockResolvedValueOnce({json: async () => defaultAccountInfo})
+    })
     it("should not have the delete or edit buttons", function() {
         render(
             <UserContext.Provider value={{...demoUser, admin: false}}>

@@ -6,11 +6,11 @@ import { Grid, LinearProgress } from '@mui/material'
 import { Route, Routes } from 'react-router-dom'
 
 // lazy loads
+import DetailedTeamPage from './teams/DetailedTeamPage'
 const Home = lazy(() => import('./Home'))
 const People = lazy(() => import('./people/People'))
 const OrgChart = lazy(() => import('./org-chart/OrgChart'))
 const Teams = lazy(() => import('./teams/Teams'))
-const DetailedTeamPage = lazy(() => import('./teams/DetailedTeamPage'))
 
 function ContentGrid(props) {
 

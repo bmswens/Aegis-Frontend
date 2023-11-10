@@ -9,6 +9,7 @@ import { ContentGrid } from '../Content'
 import PersonCard from './PersonCard'
 import { Stack } from '@mui/system'
 import api from '../../api'
+import LoadingSkeleton from '../../components/LoadingSkeleton'
 
 function SearchBar(props) {
     const { search, setSearch } = props
@@ -47,18 +48,6 @@ function SearchBar(props) {
                     </Stack>
                 </CardContent>
             </Card>
-        </Grid>
-    )
-}
-
-function LoadingSkeleton(props) {
-    return (
-        <Grid item xs={12}>
-            <Skeleton
-                variant="rectangular"
-                height="15vh"
-                width="100%"
-            />
         </Grid>
     )
 }

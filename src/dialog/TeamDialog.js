@@ -1,6 +1,9 @@
 // React
 import React from 'react'
 
+// keycloak
+import { useAuth } from 'react-oidc-context'
+
 //MUI
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from '@mui/material'
 import api from '../api'
@@ -21,6 +24,8 @@ function TeamDialog(props) {
         startData = team
     }
     const [data, setData] = React.useState(startData)
+
+    const auth = useAuth()
     
     function handleClose() {
         if (!team?.id) {
@@ -31,10 +36,10 @@ function TeamDialog(props) {
 
     async function submit() {
         if (team?.id) {
-            await api.teams.editTeam(data)
+            await api.teams.editTeam(data, auth.user.access_token)
         }
         else {
-            await api.teams.createTeam(data)
+            await api.teams.createTeam(data, auth.user.access_token)
         }
         handleClose()
     }
