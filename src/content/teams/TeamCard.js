@@ -111,55 +111,43 @@ function LinkButton(props) {
 function MemberStatusIcon(props) {
 
     const theme = useTheme()
-    const auth = useAuth()
 
-    const { id } = props
+    const { membership } = props
 
     // default to a person not being a member, and update on fetch
-    const nonMemberStyle = {
+
+    let style = {
         title: "Not A Member",
         color: theme.palette.info.dark,
         icon: "-"
     }
-    const [styles, setStyles] = React.useState(nonMemberStyle)
-
-    React.useEffect(() => {
-        async function load() {
-            let resp = await api.teams.getMemberStatus(id, auth.user.access_token)
-            if (resp.status === "member") {
-                setStyles({
-                    title: "Member",
-                    color: theme.palette.success.dark,
-                    icon: <CheckIcon data-testid="Member" fontSize="large" />
-                })
-            }
-            else if (resp.status === "admin") {
-                setStyles({
-                    title: "Admin",
-                    color: theme.palette.warning.dark,
-                    icon: <StarIcon data-testid="Admin" fontSize="large" />
-                })
-            }
-            else {
-                setStyles(nonMemberStyle)
-            }
+    const styling = {
+        "member": {
+            title: "Member",
+            color: theme.palette.success.dark,
+            icon: <CheckIcon data-testid="Member" fontSize="large" />
+        },
+        "admin": {
+            title: "Admin",
+            color: theme.palette.warning.dark,
+            icon: <StarIcon data-testid="Admin" fontSize="large" />
         }
-        load()
-    }, [id, auth])
+    }
 
-
-
+    if (membership) {
+        style = styling[membership]
+    }
 
     return (
         <Tooltip
-            title={styles.title}
+            title={style.title}
         >
             <Avatar
                 sx={{
-                    bgcolor: styles.color
+                    bgcolor: style.color
                 }}
             >
-                {styles.icon}
+                {style.icon}
             </Avatar>
         </Tooltip>
     )
@@ -168,6 +156,7 @@ function MemberStatusIcon(props) {
 function TeamCard(props) {
 
     const theme = useTheme()
+    const auth = useAuth()
 
     const {
         name,
@@ -201,6 +190,24 @@ function TeamCard(props) {
         return () => setInfoOpen(false)
     }, [])
 
+    // membership/admin info
+    const [membership, setMembership] = React.useState(false)
+    React.useEffect(() => {
+        async function load() {
+            let resp = await api.teams.getMemberStatus(id, auth.user.access_token)
+            if (resp.status === "member") {
+                setMembership("member")
+            }
+            else if (resp.status === "admin") {
+                setMembership("admin")
+            }
+            else {
+                setMembership(false)
+            }
+        }
+        load()
+    }, [id, auth])
+
     return (
         <Grid item xs={12}>
             <Card>
@@ -212,6 +219,7 @@ function TeamCard(props) {
                     avatar={
                         <MemberStatusIcon
                             id={id}
+                            membership={membership}
                         />
                     }
                 />
