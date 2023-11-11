@@ -16,6 +16,7 @@ import CheckIcon from '@mui/icons-material/Check'
 import StarIcon from '@mui/icons-material/Star'
 import GroupAddIcon from '@mui/icons-material/GroupAdd'
 
+
 // router dom
 import { Link } from 'react-router-dom'
 
@@ -24,15 +25,15 @@ import { useAuth } from 'react-oidc-context'
 
 // custom
 import TeamQuickInfoDialog from './TeamQuickInfoDialog'
-import UserContext from '../../context/UserContext'
 import TeamDialog from '../../dialog/TeamDialog'
 import ConfirmDialog from '../../dialog/ConfirmDialog'
 import api from '../../api'
+import PendingMembersButton from './PendingMembersButton'
+
 
 function AdminActions(props) {
 
     const { team } = props
-    const user = React.useContext(UserContext)
 
     const [editOpen, setEditOpen] = React.useState(false)
     const [deleteOpen, setDeleteOpen] = React.useState(false)
@@ -43,6 +44,10 @@ function AdminActions(props) {
 
     return (
         <>
+            <PendingMembersButton
+                id={team.id}
+                name={team.name}
+            />
             <IconButton
                 aria-label="Edit Team"
                 onClick={() => setEditOpen(true)}

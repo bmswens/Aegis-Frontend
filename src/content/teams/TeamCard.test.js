@@ -1,10 +1,10 @@
 // testing help
 import { screen, render, act, waitFor } from '@testing-library/react'
-import userEvent  from '@testing-library/user-event'
+import userEvent from '@testing-library/user-event'
 import { BrowserRouter } from 'react-router-dom'
 import api from '../../api'
 import UserContext, { demoUser, UserContextProvider } from '../../context/UserContext'
-import  * as oidc  from 'react-oidc-context'
+import * as oidc from 'react-oidc-context'
 
 // to test
 import TeamCard from './TeamCard'
@@ -22,7 +22,7 @@ const defaultAccountInfo = {
 }
 
 
-describe('<TeamCard>', function() {
+describe('<TeamCard>', function () {
     beforeEach(() => {
         let authObject = {
             isAuthenticated: true,
@@ -32,9 +32,9 @@ describe('<TeamCard>', function() {
             }
         }
         oidc.useAuth.mockReturnValue(authObject)
-        fetch = jest.fn().mockResolvedValueOnce({json: async () => defaultAccountInfo})
+        fetch = jest.fn().mockResolvedValueOnce({ json: async () => defaultAccountInfo })
     })
-    it('should display the team name', function() {
+    it('should display the team name', function () {
         let expected = "Dev Team"
         render(
             <BrowserRouter>
@@ -46,10 +46,7 @@ describe('<TeamCard>', function() {
         let actual = screen.getByText(expected)
         expect(actual).not.toBeNull()
     })
-    it("should be able to open the more info dialog", function() {
-        // TODO: Implement later
-    })
-    it("should disable buttons (map) for unprovided info", function() {
+    it("should disable buttons (map) for unprovided info", function () {
         render(
             <BrowserRouter>
                 <TeamCard
@@ -58,10 +55,10 @@ describe('<TeamCard>', function() {
                 />
             </BrowserRouter>
         )
-        let button = screen.getByRole("button", { name: "View Address"})
+        let button = screen.getByRole("button", { name: "View Address" })
         expect(button.disabled).toBeTruthy()
     })
-    it("should disable buttons (email) for unprovided info", function() {
+    it("should disable buttons (email) for unprovided info", function () {
         render(
             <BrowserRouter>
                 <TeamCard
@@ -70,10 +67,10 @@ describe('<TeamCard>', function() {
                 />
             </BrowserRouter>
         )
-        let button = screen.getByRole("button", { name: "Send Email"})
+        let button = screen.getByRole("button", { name: "Send Email" })
         expect(button.disabled).toBeTruthy()
     })
-    it("should disable buttons (phone) for unprovided info", function() {
+    it("should disable buttons (phone) for unprovided info", function () {
         render(
             <BrowserRouter>
                 <TeamCard
@@ -81,10 +78,10 @@ describe('<TeamCard>', function() {
                 />
             </BrowserRouter>
         )
-        let button = screen.getByRole("button", { name: "Call"})
+        let button = screen.getByRole("button", { name: "Call" })
         expect(button.disabled).toBeTruthy()
     })
-    it("should open the info dialog", async function() {
+    it("should open the info dialog", async function () {
         let user = userEvent.setup()
         render(
             <BrowserRouter>
@@ -102,7 +99,7 @@ describe('<TeamCard>', function() {
             expect(dialog2).toBeNull()
         })
     })
-    it("should hide the link to more details if turned off", function() {
+    it("should hide the link to more details if turned off", function () {
         render(
             <BrowserRouter>
                 <TeamCard
@@ -113,12 +110,12 @@ describe('<TeamCard>', function() {
         let button = screen.queryByRole("button", { name: "Details" })
         expect(button).toBeNull()
     })
-    it("should display a checkmark icon for members", async function() {
-        fetch = jest.fn().mockResolvedValue({json: () => { return {status: "member" } }})
+    it("should display a checkmark icon for members", async function () {
+        fetch = jest.fn().mockResolvedValue({ json: () => { return { status: "member" } } })
         render(
             <UserContextProvider>
                 <BrowserRouter>
-                    <TeamCard 
+                    <TeamCard
                         id={1}
                     />
                 </BrowserRouter>
@@ -129,17 +126,18 @@ describe('<TeamCard>', function() {
             expect(icon).not.toBeNull()
         })
     })
-    it("should display a star for admin", async function() {
-        fetch = jest.fn().mockResolvedValue({json: () => { return {status: "admin" } }})
+    it("should display a star for admin", async function () {
+        fetch = jest.fn().mockResolvedValue({ json: () => { return { status: "admin" } } })
         render(
             <UserContextProvider>
                 <BrowserRouter>
-                    <TeamCard 
+                    <TeamCard
                         id={1}
                     />
                 </BrowserRouter>
             </UserContextProvider>
         )
+        await act(() => { })
         await waitFor(() => {
             let icon = screen.getByTestId("Admin")
             expect(icon).not.toBeNull()
@@ -147,7 +145,7 @@ describe('<TeamCard>', function() {
     })
 })
 
-describe("<TeamCard> as admin", function() {
+describe("<TeamCard> as admin", function () {
     beforeEach(() => {
         let authObject = {
             isAuthenticated: true,
@@ -157,15 +155,15 @@ describe("<TeamCard> as admin", function() {
             }
         }
         oidc.useAuth.mockReturnValue(authObject)
-        fetch = jest.fn().mockResolvedValueOnce({json: async () => defaultAccountInfo})
+        fetch = jest.fn().mockResolvedValueOnce({ json: async () => defaultAccountInfo })
     })
-    it("should contain the edit modal", async function() {
-        fetch = jest.fn().mockResolvedValue({json: () => { return {status: "admin" } }})
+    it("should contain the edit modal", async function () {
+        fetch = jest.fn().mockResolvedValue({ json: () => { return { status: "admin" } } })
         let user = userEvent.setup()
         render(
             <UserContextProvider>
                 <BrowserRouter>
-                    <TeamCard 
+                    <TeamCard
                         id={1}
                     />
                 </BrowserRouter>
@@ -173,35 +171,35 @@ describe("<TeamCard> as admin", function() {
         )
         let editButton
         await waitFor(() => {
-            editButton = screen.getByRole("button", { name: "Edit Team"})
+            editButton = screen.getByRole("button", { name: "Edit Team" })
         })
         await act(() => user.click(editButton))
-        let cancelButton = screen.getByRole("button", {name: "Cancel"})
+        let cancelButton = screen.getByRole("button", { name: "Cancel" })
         await act(() => user.click(cancelButton))
         await waitFor(() => {
             let dialog = screen.queryByRole("dialog")
             expect(dialog).toBeNull()
         })
     })
-    it("should allow the admin to delete the team", async function() {
-        fetch = jest.fn().mockResolvedValue({json: () => { return {status: "admin" } }})
+    it("should allow the admin to delete the team", async function () {
+        fetch = jest.fn().mockResolvedValue({ json: () => { return { status: "admin" } } })
         let user = userEvent.setup()
         render(
             <UserContextProvider>
                 <BrowserRouter>
-                    <TeamCard 
+                    <TeamCard
                         id={1}
-                        />
+                    />
                 </BrowserRouter>
             </UserContextProvider>
         )
-        fetch = jest.fn().mockResolvedValue({ok: true})
+        fetch = jest.fn().mockResolvedValue({ ok: true, json: () => [] })
         let deleteButton
         await waitFor(() => {
-            deleteButton = screen.getByRole("button", { name: "Delete Team"})
+            deleteButton = screen.getByRole("button", { name: "Delete Team" })
         })
         await act(() => user.click(deleteButton))
-        let confirmButton = screen.getByRole("button", {name: "Confirm"})
+        let confirmButton = screen.getByRole("button", { name: "Confirm" })
         await act(() => user.click(confirmButton))
         expect(fetch).toHaveBeenCalledWith("/api/teams/1", {
             method: "DELETE",
@@ -212,7 +210,7 @@ describe("<TeamCard> as admin", function() {
     })
 })
 
-describe("<TeamCard> as non-admin", function() {
+describe("<TeamCard> as non-admin", function () {
     beforeEach(() => {
         let authObject = {
             isAuthenticated: true,
@@ -222,24 +220,24 @@ describe("<TeamCard> as non-admin", function() {
             }
         }
         oidc.useAuth.mockReturnValue(authObject)
-        fetch = jest.fn().mockResolvedValueOnce({json: async () => defaultAccountInfo})
+        fetch = jest.fn().mockResolvedValueOnce({ json: async () => defaultAccountInfo })
     })
-    it("should not have the delete or edit buttons", function() {
+    it("should not have the delete or edit buttons", function () {
         render(
-            <UserContext.Provider value={{...demoUser, admin: false}}>
+            <UserContext.Provider value={{ ...demoUser, admin: false }}>
                 <BrowserRouter>
                     <TeamCard />
                 </BrowserRouter>
             </UserContext.Provider>
         )
-        let editButton = screen.queryByRole("button", { name: "Edit Team"})
+        let editButton = screen.queryByRole("button", { name: "Edit Team" })
         expect(editButton).toBeNull()
-        let deleteButton = screen.queryByRole("button", { name: "Delete Team"})
+        let deleteButton = screen.queryByRole("button", { name: "Delete Team" })
         expect(deleteButton).toBeNull()
     })
 })
 
-describe("<TeamCard> as non-member", function() {
+describe("<TeamCard> as non-member", function () {
     beforeEach(() => {
         let authObject = {
             isAuthenticated: true,
@@ -249,13 +247,13 @@ describe("<TeamCard> as non-member", function() {
             }
         }
         oidc.useAuth.mockReturnValue(authObject)
-        fetch = jest.fn().mockResolvedValueOnce({json: async () => defaultAccountInfo})
+        fetch = jest.fn().mockResolvedValueOnce({ json: async () => defaultAccountInfo })
     })
-    it("should allow the user to request to join a team", async function() {
+    it("should allow the user to request to join a team", async function () {
         let user = userEvent.setup()
-        fetch = jest.fn().mockResolvedValue({json: () => { return {status: "none" } }})
+        fetch = jest.fn().mockResolvedValue({ json: () => { return { status: "none" } } })
         render(
-            <UserContext.Provider value={{...demoUser}}>
+            <UserContext.Provider value={{ ...demoUser }}>
                 <BrowserRouter>
                     <TeamCard
                         id={1}
@@ -265,7 +263,7 @@ describe("<TeamCard> as non-member", function() {
         )
         let button = screen.getByRole("button", { name: "Join Team" })
         await act(() => user.click(button))
-        let confirmButton = screen.getByRole("button", { name: "Confirm"})
+        let confirmButton = screen.getByRole("button", { name: "Confirm" })
         await act(() => user.click(confirmButton))
         await waitFor(() => {
             expect(fetch).toHaveBeenLastCalledWith(
@@ -279,5 +277,30 @@ describe("<TeamCard> as non-member", function() {
                 }
             )
         })
+    })
+})
+
+describe('<TeamCard> as unauth', function () {
+    beforeEach(() => {
+        let authObject = {
+            isAuthenticated: false,
+            signoutSilent: jest.fn(),
+            user: {
+                access_token: ""
+            }
+        }
+        oidc.useAuth.mockReturnValue(authObject)
+        fetch = jest.fn().mockResolvedValueOnce({ json: async () => defaultAccountInfo })
+    })
+    it("should show the 'join team' button", function () {
+        render(
+            <BrowserRouter>
+                <TeamCard
+                    id={1}
+                />
+            </BrowserRouter>
+        )
+        let joinButton = screen.queryByRole("button",  { name: "Join Team"})
+        expect(joinButton).toBeNull()
     })
 })

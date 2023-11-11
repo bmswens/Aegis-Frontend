@@ -128,6 +128,35 @@ async function joinTeam(teamId, token="") {
     return resp.ok
 }
 
+async function getPendingMembers(teamId, token="") {
+    let resp = await fetch(
+        `/api/teams/${teamId}/members/pending`,
+        {
+            method: "GET",
+            headers: {
+                authorization: `Bearer ${token}`
+            }
+        }
+    )
+    let body = await resp.json()
+    return body
+}
+
+async function approveMember(teamId, memberId, token="") {
+    let resp = await fetch(
+        `/api/teams/${teamId}/members/pending/${memberId}`,
+        {
+            method: "POST",
+            headers: {
+                authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({accepted: true})
+        }
+    )
+    return resp.ok
+}
+
 const teams = {
     getTeamsSimple,
     getTeamDetailed,
@@ -137,7 +166,9 @@ const teams = {
     createTeam,
     editTeam,
     getMemberStatus,
-    joinTeam
+    joinTeam,
+    getPendingMembers,
+    approveMember
 }
 
 export default teams
