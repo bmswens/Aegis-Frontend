@@ -106,12 +106,26 @@ async function getMemberStatus(teamId, token="") {
             method: "GET",
             headers: {
                 authorization: `Bearer ${token}`,
-            "Content-Type": "application/json"
+                "Content-Type": "application/json"
             }
         }
     )
     let body = await resp.json()
     return body
+}
+
+async function joinTeam(teamId, token="") {
+    let resp = await fetch(
+        `/api/teams/${teamId}/join`,
+        {
+            method: "POST",
+            headers: {
+                authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        }
+    )
+    return resp.ok
 }
 
 const teams = {
@@ -122,7 +136,8 @@ const teams = {
     getTeams,
     createTeam,
     editTeam,
-    getMemberStatus
+    getMemberStatus,
+    joinTeam
 }
 
 export default teams

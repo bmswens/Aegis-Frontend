@@ -14,6 +14,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import CheckIcon from '@mui/icons-material/Check'
 import StarIcon from '@mui/icons-material/Star'
+import GroupAddIcon from '@mui/icons-material/GroupAdd'
 
 // router dom
 import { Link } from 'react-router-dom'
@@ -38,10 +39,6 @@ function AdminActions(props) {
 
     async function deleteTeam() {
         await api.teams.deleteTeam(team.id)
-    }
-
-    if (!user.admin) {
-        return null
     }
 
     return (
@@ -71,6 +68,74 @@ function AdminActions(props) {
             />
         </>
     )
+}
+
+function MemberActions(props) {
+
+}
+
+
+function NonMemberActions(props) {
+
+    const auth = useAuth()
+    const { id, name } = props
+    const [open, setOpen] = React.useState(false)
+
+    async function requestJoin() {
+        await api.teams.joinTeam(id, auth.user.access_token)
+    }
+
+    return (
+        <>
+        <Tooltip
+            title="Join Team"
+        >
+            <IconButton
+                onClick={() => setOpen(true)}
+                aria-label="Join Team"
+            >
+                <GroupAddIcon fontSize="large" />
+            </IconButton>
+        </Tooltip>
+        <ConfirmDialog
+            open={open}
+            close={() => setOpen(false)}
+            text={`Request to join the ${name} team?`}
+            callback={requestJoin}
+        />
+        </>
+    )
+
+}
+
+function MembershipActionSection(props) {
+    const auth = useAuth()
+    const { membership, team } = props
+    if (!auth.isAuthenticated) {
+        return null
+    }
+    if (membership === "admin") {
+        return (
+            <AdminActions
+                team={team}
+            />
+        )
+    }
+    else if (membership === "member") {
+        return (
+            <MemberActions
+                id={team.id}
+            />
+        )
+    }
+    else {
+        return (
+            <NonMemberActions
+                id={team.id}
+                name={team.name}
+            />
+        )
+    }
 }
 
 function LinkButton(props) {
@@ -240,7 +305,7 @@ function TeamCard(props) {
                             icon={<LaunchIcon fontSize="large" />}
                         />
                     }
-                    <AdminActions
+                    <MembershipActionSection
                         team={{
                             id,
                             name,
@@ -248,6 +313,7 @@ function TeamCard(props) {
                             phone,
                             email
                         }}
+                        membership={membership}
                     />
                     <Box sx={{ flexGrow: 1 }} />
                     <LinkButton
