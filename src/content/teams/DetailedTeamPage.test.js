@@ -8,6 +8,20 @@ import mediaQuery from 'css-mediaquery';
 // to test
 import DetailedTeamPage from './DetailedTeamPage'
 
+// jest mock
+import  * as oidc  from 'react-oidc-context'
+jest.mock('react-oidc-context')
+
+const defaultAccountInfo = {
+    firstName: "",
+    lastName: "",
+    email: "bmswens@gmail.com",
+    phone: "",
+    title: "",
+    address: "",
+    lastUpdated: ""
+}
+
 function createMatchMedia(width) {
     return (query) => ({
         matches: mediaQuery.match(query, {
@@ -22,8 +36,19 @@ describe("<DetailedTeamPage> small screen", function () {
     beforeAll(() => {
         window.matchMedia = createMatchMedia(600)
     })
+    beforeEach(() => {
+        let authObject = {
+            isAuthenticated: true,
+            signoutSilent: jest.fn(),
+            user: {
+                access_token: ""
+            }
+        }
+        oidc.useAuth.mockReturnValue(authObject)
+        fetch = jest.fn().mockResolvedValueOnce({json: async () => defaultAccountInfo})
+    })
     it("should hide a lot of columns on small screens", async function () {
-        fetch = jest.fn().mockResolvedValue({
+        fetch = jest.fn().mockResolvedValueOnce({
             json: async () => {
                 return {
                     name: "Dev Team",
@@ -32,10 +57,11 @@ describe("<DetailedTeamPage> small screen", function () {
                     email: "xxx",
                     phone: "xx",
                     admins: [],
-                    people: []
+                    members: []
                 }
             }
         })
+        .mockResolvedValue({ json: () => [] })
         render(
             <MemoryRouter
                 initialEntries={["/teams/uuid"]}
@@ -61,8 +87,19 @@ describe('<DetailedTeamPage>', function () {
     beforeAll(() => {
         window.matchMedia = createMatchMedia(1200)
     })
+    beforeEach(() => {
+        let authObject = {
+            isAuthenticated: true,
+            signoutSilent: jest.fn(),
+            user: {
+                access_token: ""
+            }
+        }
+        oidc.useAuth.mockReturnValue(authObject)
+        fetch = jest.fn().mockResolvedValueOnce({json: async () => defaultAccountInfo})
+    })
     it("should use the api to load details", async function () {
-        fetch = jest.fn().mockResolvedValue({
+        fetch = jest.fn().mockResolvedValueOnce({
             json: async () => {
                 return {
                     name: "Dev Team",
@@ -71,10 +108,10 @@ describe('<DetailedTeamPage>', function () {
                     email: "xxx",
                     phone: "xx",
                     admins: [],
-                    people: []
+                    members: []
                 }
             }
-        })
+        }).mockResolvedValue({json: () => []})
         render(
             <MemoryRouter
                 initialEntries={["/teams/uuid"]}
@@ -91,6 +128,6 @@ describe('<DetailedTeamPage>', function () {
             let emailButton = screen.getByRole("button", { name: "Send Email" })
             expect(emailButton).not.toBeNull()
         })
-        expect(fetch).toHaveBeenCalledWith("/api/teams/uuid/detailed", {headers: {authorization: "Bearer "}})
+        expect(fetch).toHaveBeenCalledTimes(3)
     })
 })

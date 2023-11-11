@@ -7,6 +7,20 @@ import api from '../../api'
 // to test
 import Teams from './Teams'
 
+// jest mock
+import  * as oidc  from 'react-oidc-context'
+jest.mock('react-oidc-context')
+
+const defaultAccountInfo = {
+    firstName: "",
+    lastName: "",
+    email: "bmswens@gmail.com",
+    phone: "",
+    title: "",
+    address: "",
+    lastUpdated: ""
+}
+
 async function search(text, user) {
     let textbox = screen.getByLabelText("Search")
     await act(async () => await user.type(textbox, text))
@@ -38,6 +52,17 @@ const mockResponse = {
 }
 
 describe('<Teams>', function () {
+    beforeEach(() => {
+        let authObject = {
+            isAuthenticated: true,
+            signoutSilent: jest.fn(),
+            user: {
+                access_token: ""
+            }
+        }
+        oidc.useAuth.mockReturnValue(authObject)
+        fetch = jest.fn().mockResolvedValueOnce({json: async () => defaultAccountInfo})
+    })
     it("should use the API to load the teams", async function () {
         fetch = jest.fn().mockResolvedValue(mockResponse)
         render(

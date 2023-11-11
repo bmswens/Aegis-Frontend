@@ -1,12 +1,12 @@
 // test help
 import { act, render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import  * as oidc  from 'react-oidc-context'
 
 // to test
 import AccountDialog from "./AccountDialog"
 
 // jest mock
+import  * as oidc  from 'react-oidc-context'
 jest.mock('react-oidc-context')
 
 const defaultAccountInfo = {

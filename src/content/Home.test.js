@@ -6,7 +6,32 @@ import { BrowserRouter } from 'react-router-dom'
 // to test
 import Home from './Home'
 
+// jest mock
+import  * as oidc  from 'react-oidc-context'
+jest.mock('react-oidc-context')
+
+const defaultAccountInfo = {
+    firstName: "",
+    lastName: "",
+    email: "bmswens@gmail.com",
+    phone: "",
+    title: "",
+    address: "",
+    lastUpdated: ""
+}
+
 describe("<Home>", function() {
+    beforeEach(() => {
+        let authObject = {
+            isAuthenticated: true,
+            signoutSilent: jest.fn(),
+            user: {
+                access_token: ""
+            }
+        }
+        oidc.useAuth.mockReturnValue(authObject)
+        fetch = jest.fn().mockResolvedValueOnce({json: async () => defaultAccountInfo})
+    })
     it('should have a button to nav to teams', function() {
         render(
             <BrowserRouter>

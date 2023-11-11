@@ -8,7 +8,32 @@ import api from '../api'
 // to test
 import TeamDialog from './TeamDialog'
 
+// jest mock
+import  * as oidc  from 'react-oidc-context'
+jest.mock('react-oidc-context')
+
+const defaultAccountInfo = {
+    firstName: "",
+    lastName: "",
+    email: "bmswens@gmail.com",
+    phone: "",
+    title: "",
+    address: "",
+    lastUpdated: ""
+}
+
 describe('<TeamDialog> new team mode', function () {
+    beforeEach(() => {
+        let authObject = {
+            isAuthenticated: true,
+            signoutSilent: jest.fn(),
+            user: {
+                access_token: ""
+            }
+        }
+        oidc.useAuth.mockReturnValue(authObject)
+        fetch = jest.fn().mockResolvedValueOnce({json: async () => defaultAccountInfo})
+    })
     it("should be able to cancel without submitting", async function () {
         let close = jest.fn()
         let user = userEvent.setup()
@@ -24,20 +49,19 @@ describe('<TeamDialog> new team mode', function () {
     })
     it("should be able to create a new team", async function () {
         let expectedTeam = {
-            id: null,
             name: "Dev Team",
             address: "The Moon",
             email: "dev@gmail.com",
             phone: "911"
         }
         let user = userEvent.setup()
-        fetch = jest.fn().mockResolvedValue({json: async () => {}})
         render(
             <TeamDialog
-                open={true}
-                close={jest.fn()}
+            open={true}
+            close={jest.fn()}
             />
-        )
+            )
+        fetch = jest.fn().mockResolvedValue({json: async () => {}})
         // a lot of data entry
         let data = [
             {
@@ -64,9 +88,10 @@ describe('<TeamDialog> new team mode', function () {
         let submitButton = screen.getByRole("button", { name: "Submit" })
         await act(async () => await user.click(submitButton))
         await waitFor(() => {
-            expect(fetch).toHaveBeenCalledWith("/api/teams/create", {
+            expect(fetch).toHaveBeenCalledWith("/api/teams", {
                 method: "POST",
                 headers: {
+                    "Content-Type": "application/json",
                     authorization: "Bearer "
                 },
                 body: JSON.stringify(expectedTeam)
@@ -76,6 +101,17 @@ describe('<TeamDialog> new team mode', function () {
 })
 
 describe("<TeamDialog> edit mode", function () {
+    beforeEach(() => {
+        let authObject = {
+            isAuthenticated: true,
+            signoutSilent: jest.fn(),
+            user: {
+                access_token: ""
+            }
+        }
+        oidc.useAuth.mockReturnValue(authObject)
+        fetch = jest.fn().mockResolvedValueOnce({json: async () => defaultAccountInfo})
+    })
     it("should allow the user to edit the team info", async function () {
         let startTeam = {
             id: 1,
@@ -89,14 +125,14 @@ describe("<TeamDialog> edit mode", function () {
             phone: "119"
         }
         let user = userEvent.setup()
-        fetch = jest.fn().mockResolvedValue({json: async () => {}})
         render(
             <TeamDialog
-                team={startTeam}
-                open={true}
-                close={jest.fn()}
+            team={startTeam}
+            open={true}
+            close={jest.fn()}
             />
-        )
+            )
+        fetch = jest.fn().mockResolvedValue({json: async () => {}})
         let textBox = screen.getByLabelText("Phone")
         await act(() => user.clear(textBox))
         await act(async () => await user.type(textBox, "119"))
@@ -106,6 +142,7 @@ describe("<TeamDialog> edit mode", function () {
             expect(fetch).toHaveBeenCalledWith("/api/teams/1", {
                 method: "PUT",
                 headers: {
+                    "Content-Type": "application/json",
                     authorization: "Bearer "
                 },
                 body: JSON.stringify(expectedTeam)
