@@ -1,5 +1,6 @@
 import people from "./people"
 import teams from './teams'
+import recalls from "./recalls"
 
 async function getSelf(token) {
     let resp = await fetch("/api/self", {
@@ -27,7 +28,8 @@ const api = {
     getSelf,
     updateSelf,
     people,
-    teams
+    teams,
+    recalls
 }
 
 export default api

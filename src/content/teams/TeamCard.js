@@ -29,6 +29,7 @@ import TeamDialog from '../../dialog/TeamDialog'
 import ConfirmDialog from '../../dialog/ConfirmDialog'
 import api from '../../api'
 import PendingMembersButton from './PendingMembersButton'
+import RecallButton from './RecallButton'
 
 
 function AdminActions(props) {
@@ -44,6 +45,10 @@ function AdminActions(props) {
 
     return (
         <>
+            <RecallButton
+                id={team.id}
+                name={team.name}
+            />
             <PendingMembersButton
                 id={team.id}
                 name={team.name}
